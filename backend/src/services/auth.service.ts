@@ -4,9 +4,8 @@ import SessionModel from "../models/session.model";
 import UserModel from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
 import appAssert from "../utils/appAssert";
-import { setAuthCookies } from "../utils/cookies";
 import { oneYearFromNow } from "../utils/date";
-import { SignAccessToken, SignRefreshToken } from "../utils/jwt";
+import { signAccessToken, signRefreshToken } from "../utils/jwt";
 
 export type CreateAccountParams = {
   email: string;
@@ -47,12 +46,12 @@ export const createAccount = async (data: CreateAccountParams) => {
   });
 
   // sign refresh token
-  const refreshToken = SignRefreshToken({
+  const refreshToken = signRefreshToken({
     sessionId: session._id,
   });
 
   // sign access token
-  const accessToken = SignAccessToken({
+  const accessToken = signAccessToken({
     sessionId: session._id,
     userId,
   });
@@ -97,12 +96,12 @@ export const loginUser = async (data: LoginUserParams) => {
   const sessionId = session._id;
 
   // sign refresh token
-  const refreshToken = SignRefreshToken({
+  const refreshToken = signRefreshToken({
     sessionId,
   });
 
   // sign access token
-  const accessToken = SignAccessToken({
+  const accessToken = signAccessToken({
     sessionId,
     userId,
   });

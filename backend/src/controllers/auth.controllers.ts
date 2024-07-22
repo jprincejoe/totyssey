@@ -1,7 +1,10 @@
 import { CREATED, OK } from "../constants/http";
+import TokenTypes from "../constants/tokens";
+import SessionModel from "../models/session.model";
 import { createAccount, loginUser } from "../services/auth.service";
 import catchErrors from "../utils/catchErrors";
-import { setAuthCookies } from "../utils/cookies";
+import { clearAuthCookies, setAuthCookies } from "../utils/cookies";
+import { verifyAccessToken } from "../utils/jwt";
 import { loginSchema, registerSchema } from "../validation/auth.validation";
 
 export const registerHandler = catchErrors(async (req, res) => {
@@ -27,4 +30,23 @@ export const loginHandler = catchErrors(async (req, res) => {
   return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
     message: "Login successful",
   });
+});
+
+export const logoutHandler = catchErrors(async (req, res) => {
+  // get the access token
+  const accessToken = req.cookies[TokenTypes.ACCESS_TOKEN];
+
+  // try to get payload if we have an access token
+  if (accessToken) {
+    // get the session id
+    const payload = verifyAccessToken(accessToken);
+
+    // remove session from database if we have a session id
+    if (payload) {
+      await SessionModel.findByIdAndDelete(payload.sessionId);
+    }
+  }
+
+  // clear cookies
+  return clearAuthCookies(res).status(OK).json({ message: "Logout succesful" });
 });
