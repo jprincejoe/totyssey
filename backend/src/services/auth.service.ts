@@ -1,11 +1,15 @@
-import { CONFLICT, UNAHTORIZED } from "../constants/http";
+import { CONFLICT, UNAUTHORIZED } from "../constants/http";
 import VerificationCodeType from "../constants/verificationCodeTypes";
 import SessionModel from "../models/session.model";
 import UserModel from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
 import appAssert from "../utils/appAssert";
-import { oneYearFromNow } from "../utils/date";
-import { signAccessToken, signRefreshToken } from "../utils/jwt";
+import { oneYearFromNow, thirtyDaysFromNow } from "../utils/date";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt";
 
 export type CreateAccountParams = {
   email: string;
@@ -67,22 +71,23 @@ export const createAccount = async (data: CreateAccountParams) => {
   };
 };
 
-// Login user
+// Login user params
 export type LoginUserParams = {
   email: string;
   password: string;
 };
 
+// login user
 export const loginUser = async (data: LoginUserParams) => {
   // get the user by email
   const user = await UserModel.findOne({ email: data.email });
 
-  appAssert(user, UNAHTORIZED, "User does not exist");
+  appAssert(user, UNAUTHORIZED, "User does not exist");
 
   // validate password from the request
   const passwordIsValid = await user.comparePassword(data.password);
 
-  appAssert(passwordIsValid, UNAHTORIZED, "Passwords do not match");
+  appAssert(passwordIsValid, UNAUTHORIZED, "Passwords do not match");
 
   // store user id
   const userId = user._id;
@@ -114,5 +119,46 @@ export const loginUser = async (data: LoginUserParams) => {
     user: userWithoutPassword,
     accessToken,
     refreshToken,
+  };
+};
+
+export const refreshUserAccessToken = async (refreshToken: string) => {
+  // get paylaod from refresh token
+  const payload = verifyRefreshToken(refreshToken);
+
+  // verify that there is a payload
+  appAssert(payload, UNAUTHORIZED, "Invalid refresh token");
+
+  // find session
+  const session = await SessionModel.findById(payload.sessionId);
+
+  // verify that user has a session and that it's not expired
+  appAssert(
+    session && session.expiresAt.getTime() > Date.now(),
+    UNAUTHORIZED,
+    "Session expired or not found"
+  );
+
+  // create new session expires date
+  session.expiresAt = thirtyDaysFromNow();
+
+  // save session with new date
+  await session.save();
+
+  // sign access token
+  const accessToken = signAccessToken({
+    sessionId: session._id,
+    userId: session.userId,
+  });
+
+  // sign new refresh token
+  const newRefreshToken = signRefreshToken({
+    sessionId: session._id,
+  });
+
+  // return tokens
+  return {
+    accessToken,
+    newRefreshToken,
   };
 };
