@@ -1,8 +1,21 @@
 import { z } from "zod";
 import { isValidObjectId } from "../utils/mongoDb";
 
+//#region  Validators
+
 const emailValidator = z.string().email().min(1).max(255);
 const passwordValidator = z.string().min(6).max(255);
+const verificationCodeValidator = z
+  .string()
+  .min(1)
+  .max(24)
+  .refine(isValidObjectId, {
+    message: "Invalid verification code",
+  });
+
+//#endregion
+
+//#region  Schemas
 
 // user registration schema
 export const registerSchema = z
@@ -23,15 +36,18 @@ export const loginSchema = z.object({
 });
 
 // email verification code schema
-export const verificationCodeSchema = z
-  .string()
-  .min(1)
-  .max(24)
-  .refine(isValidObjectId, {
-    message: "Invalid verification code",
-  });
+export const verificationCodeSchema = z.object({
+  code: verificationCodeValidator,
+});
 
 // email schema
 export const emailSchema = z.object({
   email: emailValidator,
 });
+
+export const resetPasswordSchema = z.object({
+  password: passwordValidator,
+  verificationCode: verificationCodeValidator,
+});
+
+//#endregion

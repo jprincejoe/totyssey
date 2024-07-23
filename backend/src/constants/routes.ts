@@ -15,6 +15,7 @@ const ROUTES = {
     VERIFY_EMAIL: `/email/verify`,
     VERIFY_EMAIL_WITH_PARAMS: `/email/verify/:${PARAMS.EMAIL.CODE}`,
     FORGOT_PASSWORD: "/password/forgot",
+    RESET_PASSWORD: "/password/reset",
   },
 };
 

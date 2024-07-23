@@ -11,9 +11,10 @@ import PARAMS from "../constants/params";
 import { ROUTES } from "../constants/routes";
 import VerificationCodeType from "../constants/verificationCodeTypes";
 import SessionModel from "../models/session.model";
-import UserModel from "../models/user.model";
+import UserModel, { UserDocument } from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
 import appAssert from "../utils/appAssert";
+import { hashValue } from "../utils/bcrypt";
 import {
   fiveMinutesAgo,
   oneHourFromNow,
@@ -228,8 +229,8 @@ export const verifyEmail = async (code: string) => {
   };
 };
 
-// password reset email
-export const sendPasswordResetEmail = async (email: string) => {
+// forgot password email
+export const sendForgotPasswordEmail = async (email: string) => {
   // get the user by email
   const user = await UserModel.findOne({ email });
   appAssert(user, NOT_FOUND, "User not found");
@@ -284,5 +285,63 @@ export const sendPasswordResetEmail = async (email: string) => {
   return {
     url,
     emailId: data.id,
+  };
+};
+
+// reset password params
+type ResetPasswordParams = {
+  password: string;
+  verificationCode: string;
+};
+
+// reset password response
+interface ResetPasswordResponse {
+  user: Omit<UserDocument, "password">;
+}
+
+// reset password
+export const resetPassword = async ({
+  password,
+  verificationCode,
+}: ResetPasswordParams): Promise<ResetPasswordResponse> => {
+  // get the verification code
+  const foundVerificationCode = await VerificationCodeModel.findOne({
+    _id: verificationCode,
+    type: VerificationCodeType.PasswordReset,
+    expiresAt: { $gt: new Date() },
+  });
+
+  // verify we have a valid verification code
+  appAssert(
+    foundVerificationCode,
+    NOT_FOUND,
+    "Invalid or expired verification code"
+  );
+
+  // update the user's password
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    foundVerificationCode.userId,
+    {
+      password: await hashValue(password),
+    },
+    {
+      new: true,
+    }
+  );
+
+  // verify user was updated successfully
+  appAssert(updatedUser, INTERNAL_SERVER_ERROR, "Faild to reset password");
+
+  // delete the verification code after it was used
+  await foundVerificationCode.deleteOne();
+
+  // delete all sessions
+  await SessionModel.deleteMany({
+    userId: updatedUser._id,
+  });
+
+  // return success with updated user
+  return {
+    user: updatedUser.omitPassword(),
   };
 };

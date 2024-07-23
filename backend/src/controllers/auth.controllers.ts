@@ -8,17 +8,19 @@ import {
   createAccount,
   loginUser,
   refreshUserAccessToken,
-  sendPasswordResetEmail,
   verifyEmail,
+  sendForgotPasswordEmail,
+  resetPassword,
 } from "../services/auth.service";
 import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
 import { clearAuthCookies, setAuthCookies } from "../utils/cookies";
-import { RefreshTokenPayload, verifyAccessToken } from "../utils/jwt";
+import { verifyAccessToken } from "../utils/jwt";
 import {
   emailSchema,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
   verificationCodeSchema,
 } from "../validation/auth.validation";
 
@@ -95,22 +97,35 @@ export const refreshHandler = catchErrors(async (req, res) => {
 
 export const verifyEmailHandler = catchErrors(async (req, res) => {
   // get verification code
-  const code = verificationCodeSchema.parse(req.params[PARAMS.EMAIL.CODE]);
+  const result = verificationCodeSchema.parse(req.params[PARAMS.EMAIL.CODE]);
 
   // try to verify user and update status
-  await verifyEmail(code);
+  await verifyEmail(result.code);
 
   // return success
   return res.status(OK).json({ message: "Email verified" });
 });
 
-export const sendPasswordResetHandler = catchErrors(async (req, res) => {
+export const forgotPasswordHandler = catchErrors(async (req, res) => {
   // get email from body
   const request = emailSchema.parse(req.body);
 
   // send email
-  await sendPasswordResetEmail(request.email);
+  await sendForgotPasswordEmail(request.email);
 
   // return success if no errors thrown
   return res.status(OK).json({ message: "Password reset email sent" });
+});
+
+export const resetPasswordHandler = catchErrors(async (req, res) => {
+  // get verification code and password from body
+  const request = resetPasswordSchema.parse(req.body);
+
+  // call reset password
+  await resetPassword(request);
+
+  // return success
+  return clearAuthCookies(res).status(OK).json({
+    message: "Password reset successful",
+  });
 });
