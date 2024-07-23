@@ -10,7 +10,11 @@ import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
 import { clearAuthCookies, setAuthCookies } from "../utils/cookies";
 import { RefreshTokenPayload, verifyAccessToken } from "../utils/jwt";
-import { loginSchema, registerSchema } from "../validation/auth.validation";
+import {
+  loginSchema,
+  registerSchema,
+  verificationCodeSchema,
+} from "../validation/auth.validation";
 
 export const registerHandler = catchErrors(async (req, res) => {
   // validate request
@@ -32,6 +36,7 @@ export const loginHandler = catchErrors(async (req, res) => {
   // call service
   const { accessToken, refreshToken } = await loginUser(request);
 
+  // set cookies
   return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
     message: "Login successful",
   });
@@ -78,4 +83,9 @@ export const refreshHandler = catchErrors(async (req, res) => {
     .json({
       message: "Tokens refreshed",
     });
+});
+
+export const verifyEmailHandler = catchErrors(async (req, res) => {
+  // get verification code
+  const verificationCode = verificationCodeSchema.parse(req.params.code);
 });

@@ -2,16 +2,16 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import connectToDb from "./config/db";
-import { APP_ORIGIN, BASE_URL_V1, NODE_ENV, PORT } from "./constants/env";
+import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
-import catchErrors from "./utils/catchErrors";
 import { OK } from "./constants/http";
 import authRoutes from "./routes/auth.route";
+import { ROUTES } from "./constants/routes";
 
 const app = express();
 
-// Middleware
+// middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -22,13 +22,14 @@ app.use(
 );
 app.use(cookieParser());
 
-app.get("/health", (req, res) => {
+app.get(ROUTES.HEALTH.BASE, (req, res) => {
   res.status(OK).send({ message: "healthy!" });
 });
 
-app.use(`${BASE_URL_V1}/auth`, authRoutes);
+// routes
+app.use(ROUTES.AUTH.BASE, authRoutes);
 
-// Error handler
+// error handler
 app.use(errorHandler);
 
 app.listen(PORT, async () => {

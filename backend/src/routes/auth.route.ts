@@ -4,13 +4,16 @@ import {
   logoutHandler,
   refreshHandler,
   registerHandler,
+  verifyEmailHandler,
 } from "../controllers/auth.controllers";
+import { ROUTES } from "../constants/routes";
 
 const authRoutes = Router();
 
-authRoutes.post("/register", registerHandler);
-authRoutes.post("/login", loginHandler);
-authRoutes.get("/refresh", refreshHandler);
-authRoutes.get("/logout", logoutHandler);
+authRoutes.post(ROUTES.AUTH.REGISTER, registerHandler);
+authRoutes.post(ROUTES.AUTH.LOGIN, loginHandler);
+authRoutes.get(ROUTES.AUTH.REFRESH, refreshHandler);
+authRoutes.get(ROUTES.AUTH.LOGOUT, logoutHandler);
+authRoutes.get(ROUTES.AUTH.VERIFY_EMAIL, verifyEmailHandler);
 
 export default authRoutes;

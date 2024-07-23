@@ -42,7 +42,7 @@ export const createAccount = async (data: CreateAccountParams) => {
     expiresAt: oneYearFromNow(),
   });
 
-  // send verification email
+  // TODO - send verification email
 
   // create session
   const session = await SessionModel.create({

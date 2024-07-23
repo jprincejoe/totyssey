@@ -4,7 +4,7 @@ const emailSchema = z.string().email().min(1).max(255);
 const passwordSchema = z.string().min(6).max(255);
 
 // user registration validation
-const registerSchema = z
+export const registerSchema = z
   .object({
     email: emailSchema,
     password: passwordSchema,
@@ -16,9 +16,10 @@ const registerSchema = z
   });
 
 // user login validation
-const loginSchema = z.object({
+export const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
 
-export { registerSchema, loginSchema };
+// email verification code validation
+export const verificationCodeSchema = z.string().min(1).max(24);

@@ -2,6 +2,8 @@ import { ErrorRequestHandler, Response } from "express";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../constants/http";
 import { z } from "zod";
 import AppError from "../utils/AppError";
+import { clearAuthCookies } from "../utils/cookies";
+import { ROUTES } from "../constants/routes";
 
 // Error for Zod validation
 const handleZodError = (res: Response, error: z.ZodError) => {
@@ -24,8 +26,14 @@ const handleAppError = (res: Response, error: AppError) => {
   });
 };
 
+// custom error handler method
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   console.log(`PATH: ${req.path}`, error);
+
+  // if error is on token refresh then clear cookies
+  if (req.path === ROUTES.AUTH.BASE + ROUTES.AUTH.REFRESH) {
+    clearAuthCookies(res);
+  }
 
   // Check for Zod validation error
   if (error instanceof z.ZodError) {
