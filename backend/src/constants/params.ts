@@ -1,6 +1,7 @@
 const PARAMS = {
   EMAIL: {
     CODE: "code",
+    EXPIRATION: "exp",
   },
 };
 

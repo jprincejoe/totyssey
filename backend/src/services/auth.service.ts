@@ -4,19 +4,33 @@ import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
+  TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../constants/http";
+import PARAMS from "../constants/params";
+import { ROUTES } from "../constants/routes";
 import VerificationCodeType from "../constants/verificationCodeTypes";
 import SessionModel from "../models/session.model";
 import UserModel from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
 import appAssert from "../utils/appAssert";
-import { oneYearFromNow, thirtyDaysFromNow } from "../utils/date";
+import {
+  fiveMinutesAgo,
+  oneHourFromNow,
+  oneYearFromNow,
+  thirtyDaysFromNow,
+} from "../utils/date";
+import {
+  getPasswordResetTemplate,
+  getVerifyEmailTemplate,
+} from "../utils/emailTemplates";
 import {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
 } from "../utils/jwt";
+import { sendMail } from "../utils/sendMail";
+import { buildVerificationEmailRoute } from "../utils/url";
 
 export type CreateAccountParams = {
   email: string;
@@ -51,7 +65,17 @@ export const createAccount = async (data: CreateAccountParams) => {
     expiresAt: oneYearFromNow(),
   });
 
-  // TODO - send verification email
+  // send verification email
+  const emailUrl = ROUTES.AUTH.VERIFY_EMAIL + `/${verificationCode._id}`;
+
+  const result = await sendMail({
+    to: user.email,
+    ...getVerifyEmailTemplate(emailUrl),
+  });
+
+  // if (error) {
+  //   console.log(error);
+  // }
 
   // create session
   const session = await SessionModel.create({
@@ -201,5 +225,64 @@ export const verifyEmail = async (code: string) => {
   // return user
   return {
     user: updatedUser.omitPassword(),
+  };
+};
+
+// password reset email
+export const sendPasswordResetEmail = async (email: string) => {
+  // get the user by email
+  const user = await UserModel.findOne({ email });
+  appAssert(user, NOT_FOUND, "User not found");
+
+  // check the rate limit
+  const fiveMinAgo = fiveMinutesAgo();
+  const count = await VerificationCodeModel.countDocuments({
+    userId: user._id,
+    type: VerificationCodeType.PasswordReset,
+    createdAt: { $gt: fiveMinAgo },
+  });
+
+  // verify the user hasn't requested a reset more than 2 times in 5 minutes
+  appAssert(
+    count < 2,
+    TOO_MANY_REQUESTS,
+    "Too many password reset requests - please try again later"
+  );
+
+  // create verification code
+  const expiresAt = oneHourFromNow();
+  const verificationCode = await VerificationCodeModel.create({
+    userId: user._id,
+    type: VerificationCodeType.PasswordReset,
+    expiresAt,
+  });
+
+  // verify verification cdoe was created
+  appAssert(
+    verificationCode,
+    INTERNAL_SERVER_ERROR,
+    "Error creating verification code"
+  );
+
+  // build url for email template
+  const url = buildVerificationEmailRoute(verificationCode._id, expiresAt);
+
+  // send email
+  const { data, error } = await sendMail({
+    to: user.email,
+    ...getPasswordResetTemplate(url),
+  });
+
+  // verify email was sent successfully
+  appAssert(
+    data?.id,
+    INTERNAL_SERVER_ERROR,
+    `${error?.name} - ${error?.message}`
+  );
+
+  // return success
+  return {
+    url,
+    emailId: data.id,
   };
 };

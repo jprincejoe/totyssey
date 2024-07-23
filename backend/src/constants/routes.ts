@@ -12,7 +12,9 @@ const ROUTES = {
     LOGIN: "/login",
     REFRESH: "/refresh",
     LOGOUT: "/logout",
-    VERIFY_EMAIL: `/email/verify/:${PARAMS.EMAIL.CODE}`,
+    VERIFY_EMAIL: `/email/verify`,
+    VERIFY_EMAIL_WITH_PARAMS: `/email/verify/:${PARAMS.EMAIL.CODE}`,
+    FORGOT_PASSWORD: "/password/forgot",
   },
 };
 
