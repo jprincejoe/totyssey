@@ -1,10 +1,14 @@
+//#region Imports
+
 import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
+import PARAMS from "../constants/params";
 import TokenTypes from "../constants/tokens";
 import SessionModel from "../models/session.model";
 import {
   createAccount,
   loginUser,
   refreshUserAccessToken,
+  verifyEmail,
 } from "../services/auth.service";
 import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
@@ -15,6 +19,8 @@ import {
   registerSchema,
   verificationCodeSchema,
 } from "../validation/auth.validation";
+
+//#endregion
 
 export const registerHandler = catchErrors(async (req, res) => {
   // validate request
@@ -87,5 +93,11 @@ export const refreshHandler = catchErrors(async (req, res) => {
 
 export const verifyEmailHandler = catchErrors(async (req, res) => {
   // get verification code
-  const verificationCode = verificationCodeSchema.parse(req.params.code);
+  const code = verificationCodeSchema.parse(req.params[PARAMS.EMAIL.CODE]);
+
+  // try to verify user and update status
+  await verifyEmail(code);
+
+  // return success
+  return res.status(OK).json({ message: "Email verified" });
 });

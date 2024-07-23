@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidObjectId } from "../utils/mongoDb";
 
 const emailSchema = z.string().email().min(1).max(255);
 const passwordSchema = z.string().min(6).max(255);
@@ -22,4 +23,10 @@ export const loginSchema = z.object({
 });
 
 // email verification code validation
-export const verificationCodeSchema = z.string().min(1).max(24);
+export const verificationCodeSchema = z
+  .string()
+  .min(1)
+  .max(24)
+  .refine(isValidObjectId, {
+    message: "Invalid verification code",
+  });
