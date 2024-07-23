@@ -1,3 +1,5 @@
 const enum EnvironmentType {
-  Development = "development",
+  DEVELOPMENT = "development",
 }
+
+export default EnvironmentType;

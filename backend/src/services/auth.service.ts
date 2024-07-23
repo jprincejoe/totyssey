@@ -7,8 +7,7 @@ import {
   TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../constants/http";
-import PARAMS from "../constants/params";
-import { ROUTES } from "../constants/routes";
+import { Route } from "../constants/routes";
 import VerificationCodeType from "../constants/verificationCodeTypes";
 import SessionModel from "../models/session.model";
 import UserModel, { UserDocument } from "../models/user.model";
@@ -62,12 +61,12 @@ export const createAccount = async (data: CreateAccountParams) => {
   // create verification code
   const verificationCode = await VerificationCodeModel.create({
     userId,
-    type: VerificationCodeType.EmailVerification,
+    type: VerificationCodeType.EMAIL_VERIFICATION,
     expiresAt: oneYearFromNow(),
   });
 
   // send verification email
-  const emailUrl = ROUTES.AUTH.VERIFY_EMAIL + `/${verificationCode._id}`;
+  const emailUrl = Route.Auth.VERIFY_EMAIL + `/${verificationCode._id}`;
 
   const result = await sendMail({
     to: user.email,
@@ -153,7 +152,7 @@ export const loginUser = async (data: LoginUserParams) => {
 // refresh user access token
 export const refreshUserAccessToken = async (refreshToken: string) => {
   // get paylaod from refresh token
-  const payload = verifyRefreshToken(refreshToken);
+  const { payload } = verifyRefreshToken(refreshToken);
 
   // verify that there is a payload
   appAssert(payload, UNAUTHORIZED, "Invalid refresh token");
@@ -197,7 +196,7 @@ export const verifyEmail = async (code: string) => {
   // get the verification code
   const verificationCode = await VerificationCodeModel.findById({
     _id: code,
-    type: VerificationCodeType.EmailVerification,
+    type: VerificationCodeType.EMAIL_VERIFICATION,
     expiresAt: { $gt: new Date() },
   });
 
@@ -239,7 +238,7 @@ export const sendForgotPasswordEmail = async (email: string) => {
   const fiveMinAgo = fiveMinutesAgo();
   const count = await VerificationCodeModel.countDocuments({
     userId: user._id,
-    type: VerificationCodeType.PasswordReset,
+    type: VerificationCodeType.PASSWORD_RESET,
     createdAt: { $gt: fiveMinAgo },
   });
 
@@ -254,7 +253,7 @@ export const sendForgotPasswordEmail = async (email: string) => {
   const expiresAt = oneHourFromNow();
   const verificationCode = await VerificationCodeModel.create({
     userId: user._id,
-    type: VerificationCodeType.PasswordReset,
+    type: VerificationCodeType.PASSWORD_RESET,
     expiresAt,
   });
 
@@ -307,7 +306,7 @@ export const resetPassword = async ({
   // get the verification code
   const foundVerificationCode = await VerificationCodeModel.findOne({
     _id: verificationCode,
-    type: VerificationCodeType.PasswordReset,
+    type: VerificationCodeType.PASSWORD_RESET,
     expiresAt: { $gt: new Date() },
   });
 

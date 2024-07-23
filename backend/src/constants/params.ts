@@ -1,8 +1,8 @@
-const PARAMS = {
-  EMAIL: {
+const Params = {
+  Email: {
     CODE: "code",
     EXPIRATION: "exp",
   },
 };
 
-export default PARAMS;
+export default Params;

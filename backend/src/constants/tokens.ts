@@ -1,6 +1,6 @@
-const enum TokenTypes {
+const enum TokenType {
   ACCESS_TOKEN = "accessToken",
   REFRESH_TOKEN = "refreshToken",
 }
 
-export default TokenTypes;
+export default TokenType;

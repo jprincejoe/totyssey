@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
 import authRoutes from "./routes/auth.route";
-import { ROUTES } from "./constants/routes";
+import { Route } from "./constants/routes";
 
 const app = express();
 
@@ -22,12 +22,15 @@ app.use(
 );
 app.use(cookieParser());
 
-app.get(ROUTES.HEALTH.BASE, (req, res) => {
+app.get(Route.Health.BASE, (req, res) => {
   res.status(OK).send({ message: "healthy!" });
 });
 
 // routes
-app.use(ROUTES.AUTH.BASE, authRoutes);
+app.use(Route.Auth.BASE, authRoutes);
+
+// protected routes
+// app.use(Route.User.BASE, autheticate, userRoutes);
 
 // error handler
 app.use(errorHandler);

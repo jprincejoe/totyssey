@@ -1,13 +1,14 @@
 import { CookieOptions, Response } from "express";
-import TokenTypes from "../constants/tokens";
+import TokenType from "../constants/tokens";
 import { NODE_ENV } from "../constants/env";
 import { fifteenMinutesFromNow, thirtyDaysFromNow } from "./date";
-import { ROUTES } from "../constants/routes";
+import { Route } from "../constants/routes";
+import EnvironmentType from "../constants/environmentTypes";
 
 const defaultCookieOptions: CookieOptions = {
   sameSite: "strict",
   httpOnly: true,
-  secure: NODE_ENV !== EnvironmentType.Development,
+  secure: NODE_ENV !== EnvironmentType.DEVELOPMENT,
 };
 
 const accessTokenOptions = (): CookieOptions => ({
@@ -18,7 +19,7 @@ const accessTokenOptions = (): CookieOptions => ({
 const refreshTokenOptions = (): CookieOptions => ({
   ...defaultCookieOptions,
   expires: thirtyDaysFromNow(),
-  path: ROUTES.AUTH.BASE + ROUTES.AUTH.REFRESH,
+  path: Route.Auth.BASE + Route.Auth.REFRESH,
 });
 
 type Params = {
@@ -29,13 +30,13 @@ type Params = {
 
 export const setAuthCookies = ({ res, accessToken, refreshToken }: Params) =>
   res
-    .cookie(TokenTypes.ACCESS_TOKEN, accessToken, accessTokenOptions())
-    .cookie(TokenTypes.REFRESH_TOKEN, refreshToken, refreshTokenOptions());
+    .cookie(TokenType.ACCESS_TOKEN, accessToken, accessTokenOptions())
+    .cookie(TokenType.REFRESH_TOKEN, refreshToken, refreshTokenOptions());
 
 export const clearAuthCookies = (res: Response) => {
   return res
-    .clearCookie(TokenTypes.ACCESS_TOKEN)
-    .clearCookie(TokenTypes.REFRESH_TOKEN, {
-      path: ROUTES.AUTH.BASE + ROUTES.AUTH.REFRESH,
+    .clearCookie(TokenType.ACCESS_TOKEN)
+    .clearCookie(TokenType.REFRESH_TOKEN, {
+      path: Route.Auth.BASE + Route.Auth.REFRESH,
     });
 };

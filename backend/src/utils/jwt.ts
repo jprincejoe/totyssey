@@ -38,34 +38,48 @@ export const signRefreshToken = (payload: RefreshTokenPayload) => {
   return jwt.sign(payload, secret, { ...defaults, ...signOpts });
 };
 
+interface AccessTokenVerificationResult {
+  payload?: AccessTokenPayload;
+  error?: string;
+}
+
 export const verifyAccessToken = (
   accessToken: string
-): AccessTokenPayload | null => {
+): AccessTokenVerificationResult => {
   try {
     const payload = jwt.verify(accessToken, JWT_SECRET, {
       ...defaults,
       ...accessTokenSignOptions,
     }) as AccessTokenPayload;
 
-    return payload;
+    return { payload };
   } catch (error: any) {
     console.log("JWT access token verification failed:", error.message);
-    return null;
+    return {
+      error: error.message,
+    };
   }
 };
 
+interface RefreshTokenVerificationResult {
+  payload?: RefreshTokenPayload;
+  error?: string;
+}
+
 export const verifyRefreshToken = (
   refreshToken: string
-): RefreshTokenPayload | null => {
+): RefreshTokenVerificationResult => {
   try {
     const payload = jwt.verify(refreshToken, JWT_REFRESH_SECRET, {
       ...defaults,
       ...refreshTokenSignOptions,
     }) as RefreshTokenPayload;
 
-    return payload;
+    return { payload };
   } catch (error: any) {
     console.log("JWT refresh token verification failed:", error.message);
-    return null;
+    return {
+      error: error.message,
+    };
   }
 };

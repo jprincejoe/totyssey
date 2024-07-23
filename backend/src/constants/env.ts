@@ -1,3 +1,5 @@
+import EnvironmentType from "./environmentTypes";
+
 const getEnv = (key: string, defaultValue?: string): string => {
   const value = process.env[key] || defaultValue;
 
@@ -8,7 +10,7 @@ const getEnv = (key: string, defaultValue?: string): string => {
   return value;
 };
 
-export const NODE_ENV = getEnv("NODE_ENV", EnvironmentType.Development);
+export const NODE_ENV = getEnv("NODE_ENV", EnvironmentType.DEVELOPMENT);
 export const MONGO_URI = getEnv("MONGO_URI");
 export const PORT = getEnv("PORT", "4004");
 export const APP_ORIGIN = getEnv("APP_ORIGIN");

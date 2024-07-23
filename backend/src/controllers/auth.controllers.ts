@@ -1,8 +1,8 @@
 //#region Imports
 
 import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
-import PARAMS from "../constants/params";
-import TokenTypes from "../constants/tokens";
+import Params from "../constants/params";
+import TokenType from "../constants/tokens";
 import SessionModel from "../models/session.model";
 import {
   createAccount,
@@ -54,14 +54,12 @@ export const loginHandler = catchErrors(async (req, res) => {
 
 export const logoutHandler = catchErrors(async (req, res) => {
   // get the access token
-  const accessToken = req.cookies[TokenTypes.ACCESS_TOKEN] as
-    | string
-    | undefined;
+  const accessToken = req.cookies[TokenType.ACCESS_TOKEN] as string | undefined;
 
   // try to get payload if we have an access token
   if (accessToken) {
     // get the session id
-    const payload = verifyAccessToken(accessToken);
+    const { payload } = verifyAccessToken(accessToken);
 
     // remove session from database if we have a session id
     if (payload) {
@@ -75,7 +73,7 @@ export const logoutHandler = catchErrors(async (req, res) => {
 
 export const refreshHandler = catchErrors(async (req, res) => {
   // get current refresh token
-  const refreshToken = req.cookies[TokenTypes.REFRESH_TOKEN] as
+  const refreshToken = req.cookies[TokenType.REFRESH_TOKEN] as
     | string
     | undefined;
 
@@ -97,7 +95,7 @@ export const refreshHandler = catchErrors(async (req, res) => {
 
 export const verifyEmailHandler = catchErrors(async (req, res) => {
   // get verification code
-  const result = verificationCodeSchema.parse(req.params[PARAMS.EMAIL.CODE]);
+  const result = verificationCodeSchema.parse(req.params[Params.Email.CODE]);
 
   // try to verify user and update status
   await verifyEmail(result.code);

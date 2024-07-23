@@ -3,7 +3,7 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../constants/http";
 import { z } from "zod";
 import AppError from "../utils/AppError";
 import { clearAuthCookies } from "../utils/cookies";
-import { ROUTES } from "../constants/routes";
+import { Route } from "../constants/routes";
 
 // Error for Zod validation
 const handleZodError = (res: Response, error: z.ZodError) => {
@@ -31,7 +31,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   console.log(`PATH: ${req.path}`, error);
 
   // if error is on token refresh then clear cookies
-  if (req.path === ROUTES.AUTH.BASE + ROUTES.AUTH.REFRESH) {
+  if (req.path === Route.Auth.BASE + Route.Auth.REFRESH) {
     clearAuthCookies(res);
   }
 
