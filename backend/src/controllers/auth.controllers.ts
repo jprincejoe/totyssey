@@ -95,10 +95,10 @@ export const refreshHandler = catchErrors(async (req, res) => {
 
 export const verifyEmailHandler = catchErrors(async (req, res) => {
   // get verification code
-  const result = verificationCodeSchema.parse(req.params[Params.Email.CODE]);
+  const code = verificationCodeSchema.parse(req.params[Params.Email.CODE]);
 
   // try to verify user and update status
-  await verifyEmail(result.code);
+  await verifyEmail(code);
 
   // return success
   return res.status(OK).json({ message: "Email verified" });

@@ -36,9 +36,11 @@ export const loginSchema = z.object({
 });
 
 // email verification code schema
-export const verificationCodeSchema = z.object({
-  code: verificationCodeValidator,
-});
+// export const verificationCodeSchema = z.object({
+//   code: verificationCodeValidator,
+// });
+
+export const verificationCodeSchema = verificationCodeValidator;
 
 // email schema
 export const emailSchema = z.object({
