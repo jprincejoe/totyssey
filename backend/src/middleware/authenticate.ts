@@ -4,6 +4,7 @@ import appAssert from "../utils/appAssert";
 import { UNAUTHORIZED } from "../constants/http";
 import AppErrorCode from "../constants/appErrorCode";
 import { verifyAccessToken } from "../utils/jwt";
+import setUserRequestValues from "../utils/request";
 
 const authenticate: RequestHandler = (req, res, next) => {
   // get access token from cookies
@@ -18,7 +19,7 @@ const authenticate: RequestHandler = (req, res, next) => {
   );
 
   // decode token
-  const { error, payload } = verifyAccessToken(accessToken);
+  const { payload } = verifyAccessToken(accessToken);
 
   // verify we have a valid token
   appAssert(
@@ -27,4 +28,12 @@ const authenticate: RequestHandler = (req, res, next) => {
     "Invalid or expired token",
     AppErrorCode.INVALID_ACCESS_TOKEN
   );
+
+  // set userId and sessionId on request
+  setUserRequestValues(req, payload);
+
+  // call next
+  next();
 };
+
+export default authenticate;

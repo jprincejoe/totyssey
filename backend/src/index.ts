@@ -8,6 +8,8 @@ import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
 import authRoutes from "./routes/auth.route";
 import { Route } from "./constants/routes";
+import authenticate from "./middleware/authenticate";
+import userRoutes from "./routes/user.route";
 
 const app = express();
 
@@ -30,7 +32,7 @@ app.get(Route.Health.BASE, (req, res) => {
 app.use(Route.Auth.BASE, authRoutes);
 
 // protected routes
-// app.use(Route.User.BASE, autheticate, userRoutes);
+app.use(Route.User.BASE, authenticate, userRoutes);
 
 // error handler
 app.use(errorHandler);
