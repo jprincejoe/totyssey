@@ -22,7 +22,9 @@ const MobileNav = () => {
         </SheetTitle>
         <Separator />
         <SheetDescription className="flex">
-          <Button className="flex-1 font-bold bg-orange-500">Log In</Button>
+          <div className="flex flex-col flex-1 gap-y-2">
+            <Button>Log In</Button>
+          </div>
         </SheetDescription>
       </SheetContent>
     </Sheet>
