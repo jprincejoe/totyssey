@@ -17,7 +17,7 @@ interface CustomFormFieldProps {
   className?: string;
 }
 
-const RHFInput: React.FC<CustomFormFieldProps> = ({
+const FormInput: React.FC<CustomFormFieldProps> = ({
   control,
   name,
   label,
@@ -44,4 +44,4 @@ const RHFInput: React.FC<CustomFormFieldProps> = ({
   );
 };
 
-export default RHFInput;
+export default FormInput;

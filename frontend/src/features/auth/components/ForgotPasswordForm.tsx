@@ -3,10 +3,11 @@ import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ClientRoute } from "@/constants/clientRoutes";
-import { useLogin } from "../hooks/useLogin";
+import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 
-const LoginForm = () => {
-  const { form, onSubmit, mutation } = useLogin();
+const ForgotPasswordForm = () => {
+  // Forgot Password Hook
+  const { form, onSubmit, mutation } = useForgotPassword();
 
   return (
     <Form {...form}>
@@ -23,33 +24,22 @@ const LoginForm = () => {
             placeholder="john.doe@example.com"
             type="email"
           />
-
-          {/* Password */}
-          <FormInput
-            control={form.control}
-            name="password"
-            label="Password"
-            placeholder="Password"
-            type="password"
-          />
         </div>
-
-        {/* Forgot Password */}
-        <Link
-          to={ClientRoute.Auth.FORGOT_PASSWORD}
-          className="ml-auto inline-block text-sm"
-        >
-          <p className="text-totysseyBlue">Forgot password?</p>
-        </Link>
 
         {/* Submit Button */}
         <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? "Logging in..." : "Login"}
+          {mutation.isPending
+            ? "Sending password reset..."
+            : "Send Password Reset"}
         </Button>
 
         {/* Don't have an account? */}
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
+        <div className="flex mt-4 text-center text-sm justify-center">
+          Go back to&nbsp;
+          <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+            Sign in
+          </Link>
+          &nbsp;<p>or</p>&nbsp;
           <Link to={ClientRoute.Auth.REGISTER} className="text-totysseyBlue">
             Sign up
           </Link>
@@ -59,4 +49,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default ForgotPasswordForm;

@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import Home from "./pages/HomePage";
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import Register from "./pages/RegisterPage";
+import RegisterPage from "./pages/RegisterPage";
 import { ClientRoute } from "./constants/clientRoutes";
-import ForgotPassword from "./pages/ForgotPasswordPage";
-import VerifyEmail from "./pages/VerifyEmailPage";
-import ResetPassword from "./pages/ResetPasswordPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -16,7 +16,7 @@ const AppRoutes = () => {
         path={ClientRoute.Home.BASE}
         element={
           <Layout heroVisibility={true}>
-            <Home />
+            <HomePage />
           </Layout>
         }
       />
@@ -25,7 +25,7 @@ const AppRoutes = () => {
         path={ClientRoute.Auth.REGISTER}
         element={
           <Layout>
-            <Register />
+            <RegisterPage />
           </Layout>
         }
       />
@@ -37,7 +37,7 @@ const AppRoutes = () => {
         path={ClientRoute.Auth.VERIFY_EMAIL}
         element={
           <Layout>
-            <VerifyEmail />
+            <VerifyEmailPage />
           </Layout>
         }
       />
@@ -47,7 +47,7 @@ const AppRoutes = () => {
         path={ClientRoute.Auth.FORGOT_PASSWORD}
         element={
           <Layout>
-            <ForgotPassword />
+            <ForgotPasswordPage />
           </Layout>
         }
       />
@@ -57,7 +57,7 @@ const AppRoutes = () => {
         path={ClientRoute.Auth.RESET_PASSWORD}
         element={
           <Layout>
-            <ResetPassword />
+            <ResetPasswordPage />
           </Layout>
         }
       />
