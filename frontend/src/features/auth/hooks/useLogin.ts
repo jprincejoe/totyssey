@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { LoginSchema } from "../validation/authValidation";
-import { loginMutationApi } from "../api/apiAuth";
 import { TLogin } from "../types/authTypes";
+import { authApi } from "../api/apiAuth";
+import { authSchema } from "../validation/authValidation";
 
 // Default Values
 const defaultValues: TLogin = {
@@ -19,7 +19,7 @@ export const useLogin = () => {
 
   // Form
   const form = useForm<TLogin>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(authSchema.Login),
     defaultValues,
   });
 
@@ -39,7 +39,7 @@ export const useLogin = () => {
 
   // Mutation
   const mutation = useMutation({
-    mutationFn: loginMutationApi,
+    mutationFn: authApi.login,
     onSuccess,
     onError,
   });

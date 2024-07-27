@@ -1,34 +1,32 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/auth/LoginPage";
+import RegisterPage from "./pages/auth/RegisterPage";
 import { ClientRoute } from "./constants/clientRoutes";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import AppContainer from "./components/AppContainer";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Home */}
-      <Route
-        path={ClientRoute.Home.BASE}
-        element={
-          <Layout heroVisibility={true}>
-            <HomePage />
-          </Layout>
-        }
-      />
+      <Route path={ClientRoute.Root.BASE} element={<AppContainer />}>
+        {/* Home */}
+        <Route
+          index
+          element={
+            <Layout heroVisibility={true}>
+              <HomePage />
+            </Layout>
+          }
+        />
+      </Route>
+
       {/* Register */}
-      <Route
-        path={ClientRoute.Auth.REGISTER}
-        element={
-          <Layout>
-            <RegisterPage />
-          </Layout>
-        }
-      />
+      <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />
+
       {/* Login */}
       <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />
 
@@ -61,7 +59,9 @@ const AppRoutes = () => {
           </Layout>
         }
       />
-      <Route path="/*" element={<Navigate to={ClientRoute.Home.BASE} />} />
+
+      {/* Catch All */}
+      <Route path="/*" element={<Navigate to={ClientRoute.Root.BASE} />} />
     </Routes>
   );
 };

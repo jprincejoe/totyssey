@@ -3,15 +3,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  ExpirationSchema,
-  ResetPasswordSchema,
-  VerificationCodeSchema,
-} from "../validation/authValidation";
-import { resetPasswordMutationApi } from "../api/apiAuth";
 import { TResetPassword } from "../types/authTypes";
 import { validateSearchParam } from "@/utils/searchParams";
 import Params from "@/constants/params";
+import { authApi } from "../api/apiAuth";
+import { authSchema } from "../validation/authValidation";
 
 // Default Values
 const defaultValues: TResetPassword = {
@@ -25,8 +21,14 @@ export const useResetPassword = () => {
   const navigate = useNavigate();
 
   // Get values from search params URL
-  const code = validateSearchParam(Params.Email.CODE, VerificationCodeSchema);
-  const exp = validateSearchParam(Params.Email.EXPIRATION, ExpirationSchema);
+  const code = validateSearchParam(
+    Params.Email.CODE,
+    authSchema.VerificationCode
+  );
+  const exp = validateSearchParam(
+    Params.Email.EXPIRATION,
+    authSchema.Expiration
+  );
 
   // Get the current time
   const now: number = Date.now();
@@ -36,7 +38,7 @@ export const useResetPassword = () => {
 
   // Form
   const form = useForm<TResetPassword>({
-    resolver: zodResolver(ResetPasswordSchema),
+    resolver: zodResolver(authSchema.ResetPassword),
     defaultValues,
   });
 
@@ -56,7 +58,7 @@ export const useResetPassword = () => {
 
   // Mutation
   const mutation = useMutation({
-    mutationFn: resetPasswordMutationApi,
+    mutationFn: authApi.resetPassword,
     onSuccess,
     onError,
   });

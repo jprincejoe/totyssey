@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ForgotPasswordSchema } from "../validation/authValidation";
-import { forgotPasswordMutationApi } from "../api/apiAuth";
 import { TForgotPassword } from "../types/authTypes";
+import { authApi } from "../api/apiAuth";
+import { authSchema } from "../validation/authValidation";
 
 // Default Values
 const defaultValues: TForgotPassword = {
@@ -18,7 +18,7 @@ export const useForgotPassword = () => {
 
   // Form
   const form = useForm<TForgotPassword>({
-    resolver: zodResolver(ForgotPasswordSchema),
+    resolver: zodResolver(authSchema.ForgotPassword),
     defaultValues,
   });
 
@@ -38,7 +38,7 @@ export const useForgotPassword = () => {
 
   // Mutation
   const mutation = useMutation({
-    mutationFn: forgotPasswordMutationApi,
+    mutationFn: authApi.forgotPassword,
     onSuccess,
     onError,
   });

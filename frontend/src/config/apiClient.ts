@@ -13,9 +13,14 @@ const API = axios.create(options);
 API.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const { status, data } = error.response;
-    console.log(data);
-    return Promise.reject({ status, ...data });
+    if (error.response) {
+      const { status, data } = error.response;
+      console.log(data);
+      return Promise.reject({ status, ...data });
+    } else {
+      console.error("An error has occured", error.message);
+      return Promise.reject({ status: null, message: error.message });
+    }
   }
 );
 

@@ -2,6 +2,8 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/FormInput";
 import { Button } from "@/components/ui/button";
 import { useRegister } from "../hooks/useRegister";
+import { Link } from "react-router-dom";
+import { ClientRoute } from "@/constants/clientRoutes";
 
 const RegisterForm = () => {
   // Register Hook
@@ -9,29 +11,26 @@ const RegisterForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col space-y-6"
+      >
         <div className="space-y-4">
-          {/* First & Last Name */}
-          <div className="flex flex-col md:flex-row gap-x-4 space-y-6 md:space-y-0">
-            {/* First Name */}
-            <FormInput
-              className="flex-1"
-              control={form.control}
-              name="firstName"
-              label="First Name"
-              placeholder="John"
-            />
+          {/* First Name */}
+          <FormInput
+            control={form.control}
+            name="firstName"
+            label="First Name"
+            placeholder="John"
+          />
 
-            {/* Last Name */}
-            <FormInput
-              className="flex-1"
-              control={form.control}
-              name="lastName"
-              label="Last Name"
-              placeholder="Doe"
-            />
-          </div>
-
+          {/* Last Name */}
+          <FormInput
+            control={form.control}
+            name="lastName"
+            label="Last Name"
+            placeholder="Doe"
+          />
           {/* Email */}
           <FormInput
             control={form.control}
@@ -58,36 +57,20 @@ const RegisterForm = () => {
             placeholder="Confirm Password"
             type="password"
           />
-          {/* <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First Name</FormLabel>
-              <FormControl>
-                <Input {...field} type="text" placeholder="John" />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input {...field} type="text" placeholder="Doe" />
-              </FormControl>
-            </FormItem>
-          )}
-        /> */}
         </div>
 
         {/* Submit Button */}
         <Button type="submit" disabled={mutation.isPending}>
           {mutation.isPending ? "Registering..." : "Register"}
         </Button>
+
+        {/* Already have an account? */}
+        <div className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+            Sign in
+          </Link>
+        </div>
       </form>
     </Form>
   );

@@ -19,14 +19,14 @@ const VerifyEmailPage = () => {
   // Error
   if (isError) {
     toast.error(error?.message);
-    navigate(ClientRoute.Home.BASE);
+    navigate(ClientRoute.Root.BASE);
     return <></>;
   }
 
   // Success
   if (isSuccess) {
     toast.success("Email verified!");
-    navigate(ClientRoute.Home.BASE);
+    navigate(ClientRoute.Root.BASE);
     return <></>;
   }
 };

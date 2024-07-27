@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RegisterSchema } from "../validation/authValidation";
-import { registerMutationApi } from "../api/apiAuth";
 import { TRegister } from "../types/authTypes";
+import { authApi } from "../api/apiAuth";
+import { authSchema } from "../validation/authValidation";
 
 // Default Values
 const defaultValues: TRegister = {
@@ -22,7 +22,7 @@ export const useRegister = () => {
 
   // Form
   const form = useForm<TRegister>({
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(authSchema.Register),
     defaultValues,
   });
 
@@ -42,7 +42,7 @@ export const useRegister = () => {
 
   // Mutation
   const mutation = useMutation({
-    mutationFn: registerMutationApi,
+    mutationFn: authApi.register,
     onSuccess,
     onError,
   });

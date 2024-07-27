@@ -1,9 +1,12 @@
 import Params from "./params";
 
 const ClientRoute = {
-  Home: {
+  Root: {
     BASE: `/`,
   },
+  // Home: {
+  //   BASE: `/`,
+  // },
   Auth: {
     REGISTER: `/register`,
     LOGIN: `/login`,
