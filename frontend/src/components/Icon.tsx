@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { cn } from "@/lib/utils";
-import { FA, IconWeight } from "@/types/Icons";
+import { FA, IconWeight } from "@/enums/Icons";
 
 interface IconProps {
   icon: FA;

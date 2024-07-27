@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import MobileNav from "./MobileNav";
 import MainNav from "./MainNav";
-import Logo from "./Logo";
+import Logo from "@/components/Logo";
 
 const Header = () => {
   return (

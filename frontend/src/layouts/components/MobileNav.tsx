@@ -1,14 +1,14 @@
-import { FA } from "@/types/Icons";
-import Icon from "./Icon";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
+import { FA } from "@/enums/Icons";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
+} from "@/components/ui/sheet";
+import Icon from "@/components/Icon";
 
 const MobileNav = () => {
   return (

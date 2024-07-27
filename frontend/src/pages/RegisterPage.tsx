@@ -2,15 +2,15 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema } from "@/validation/authValidation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import * as apiClient from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { RegisterSchema } from "@/features/auth/validation/authValidation";
+import { registerMutationApi } from "@/features/auth/api/apiAuth";
 
 //#endregion
 
@@ -35,7 +35,7 @@ const Register = () => {
 
   // RQ Mutate
   const registerMutation = useMutation({
-    mutationFn: apiClient.register,
+    mutationFn: registerMutationApi,
     onSuccess: () => {
       toast.success("Account created!");
       navigate("/", {

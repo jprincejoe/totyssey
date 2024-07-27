@@ -1,6 +1,6 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import Footer from "@/layouts/components/Footer";
+import Header from "@/layouts/components/Header";
+import Hero from "@/layouts/components/Hero";
 
 type Props = {
   heroVisibility?: boolean;

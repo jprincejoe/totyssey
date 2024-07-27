@@ -1,14 +1,9 @@
-//#region Imports
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import Logo from "@/components/Logo";
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/features/auth/components/LoginForm";
 
-//#endregion
-
-const Login = () => {
-  // Component
+const LoginPage = () => {
   return (
     <div className="h-screen flex justify-center items-center bg-gray-100">
       <Card className="w-[400px] shadow-md">
@@ -28,4 +23,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

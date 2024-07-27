@@ -1,59 +1,13 @@
-//#region Imports
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/validation/authValidation";
-import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
-import * as apiClient from "../lib/api";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { ClientRoute } from "@/constants/clientRoutes";
-
-//#endregion
-
-type LoginFormData = z.infer<typeof LoginSchema>;
-
-const defaultLoginFormValues: LoginFormData = {
-  email: "",
-  password: "",
-};
+import { useLogin } from "../hooks/loginHook";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
+  const { form, onSubmit, loginMutation } = useLogin();
 
-  // RHF Form
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: defaultLoginFormValues,
-  });
-
-  // RQ Mutate
-  const loginMutation = useMutation({
-    mutationFn: apiClient.login,
-    onSuccess: () => {
-      toast.success("Signed in!");
-      navigate("/", {
-        replace: true,
-      });
-    },
-    onError: (error: Error) => {
-      console.log(error.message);
-      toast.error(error.message);
-    },
-  });
-
-  // Submit Handler
-  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
-    loginMutation.mutate(data);
-    console.log(data);
-  };
-
-  // Component
   return (
     <Form {...form}>
       <form
@@ -88,6 +42,7 @@ const LoginForm = () => {
           <p className="text-totysseyBlue">Forgot password?</p>
         </Link>
 
+        {/* Submit Button */}
         <Button type="submit" disabled={loginMutation.isPending}>
           {loginMutation.isPending ? "Logging in..." : "Login"}
         </Button>

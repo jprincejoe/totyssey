@@ -2,18 +2,18 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ForgotPasswordSchema } from "@/validation/authValidation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import * as apiClient from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { ClientRoute } from "@/constants/clientRoutes";
+import { ForgotPasswordSchema } from "@/features/auth/validation/authValidation";
+import { forgotPasswordMutationApi } from "@/features/auth/api/apiAuth";
 
 //#endregion
 
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
 
   // RQ Mutate
   const forgotPasswordMutation = useMutation({
-    mutationFn: apiClient.forgotPassword,
+    mutationFn: forgotPasswordMutationApi,
     onSuccess: () => {
       toast.success("Password reset sent!");
       navigate("/", {

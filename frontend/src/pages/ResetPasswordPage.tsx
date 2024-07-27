@@ -6,19 +6,19 @@ import {
   ExpirationSchema,
   ResetPasswordSchema,
   VerificationCodeSchema,
-} from "@/validation/authValidation";
+} from "@/features/auth/validation/authValidation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
-import * as apiClient from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClientRoute } from "@/constants/clientRoutes";
 import Params from "@/constants/params";
 import { validateSearchParam } from "@/utils/searchParams";
+import { resetPasswordMutationApi } from "@/features/auth/api/apiAuth";
 
 //#endregion
 
@@ -51,7 +51,7 @@ const ResetPassword = () => {
 
   // RQ Mutate
   const resetPasswordMutation = useMutation({
-    mutationFn: apiClient.resetPassword,
+    mutationFn: resetPasswordMutationApi,
     onSuccess: () => {
       toast.success("Password reset!");
       navigate(ClientRoute.Auth.LOGIN, {

@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Home from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import Register from "./pages/RegisterPage";
 import { ClientRoute } from "./constants/clientRoutes";
-import ForgotPassword from "./pages/ForgotPassword";
-import VerifyEmail from "./pages/VerifyEmail";
-import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPasswordPage";
+import VerifyEmail from "./pages/VerifyEmailPage";
+import ResetPassword from "./pages/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -30,7 +30,7 @@ const AppRoutes = () => {
         }
       />
       {/* Login */}
-      <Route path={ClientRoute.Auth.LOGIN} element={<Login />} />
+      <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />
 
       {/* Verify Email */}
       <Route
