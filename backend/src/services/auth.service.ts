@@ -31,7 +31,7 @@ import {
   verifyRefreshToken,
 } from "../utils/jwt";
 import { sendMail } from "../utils/sendMail";
-import { buildVerificationEmailRoute } from "../utils/url";
+import { buildForgotPasswordEmailRoute } from "../utils/url";
 
 export type CreateAccountParams = {
   firstName: string;
@@ -264,7 +264,7 @@ export const sendForgotPasswordEmail = async (email: string) => {
     expiresAt,
   });
 
-  // verify verification cdoe was created
+  // verify verification code was created
   appAssert(
     verificationCode,
     INTERNAL_SERVER_ERROR,
@@ -272,7 +272,7 @@ export const sendForgotPasswordEmail = async (email: string) => {
   );
 
   // build url for email template
-  const url = buildVerificationEmailRoute(verificationCode._id, expiresAt);
+  const url = buildForgotPasswordEmailRoute(verificationCode._id, expiresAt);
 
   // send email
   const { data, error } = await sendMail({

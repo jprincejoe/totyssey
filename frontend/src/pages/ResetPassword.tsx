@@ -2,7 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ForgotPasswordSchema } from "@/validation/authValidation";
+import {
+  ExpirationSchema,
+  ResetPasswordSchema,
+  VerificationCodeSchema,
+} from "@/validation/authValidation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
@@ -12,32 +16,45 @@ import * as apiClient from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
 import { ClientRoute } from "@/constants/clientRoutes";
+import Params from "@/constants/params";
+import { validateSearchParam } from "@/utils/searchParams";
 
 //#endregion
 
-type ForgotPasswordFormData = z.infer<typeof ForgotPasswordSchema>;
+type ResetPasswordFormData = z.infer<typeof ResetPasswordSchema>;
 
-const defaultFormValues: ForgotPasswordFormData = {
-  email: "",
+const defaultFormValues: ResetPasswordFormData = {
+  password: "",
+  confirmPassword: "",
+  verificationCode: "",
 };
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
 
+  // Get values from search params URL
+  const code = validateSearchParam(Params.Email.CODE, VerificationCodeSchema);
+  const exp = validateSearchParam(Params.Email.EXPIRATION, ExpirationSchema);
+
+  // Get the current time
+  const now: number = Date.now();
+
+  // Determine if the code is valid
+  const isValid: boolean = !!code && exp !== null && !isNaN(exp) && exp > now;
+
   // RHF Form
-  const form = useForm<ForgotPasswordFormData>({
-    resolver: zodResolver(ForgotPasswordSchema),
+  const form = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: defaultFormValues,
   });
 
   // RQ Mutate
-  const forgotPasswordMutation = useMutation({
-    mutationFn: apiClient.forgotPassword,
+  const resetPasswordMutation = useMutation({
+    mutationFn: apiClient.resetPassword,
     onSuccess: () => {
-      toast.success("Password reset sent!");
-      navigate("/", {
+      toast.success("Password reset!");
+      navigate(ClientRoute.Auth.LOGIN, {
         replace: true,
       });
     },
@@ -48,64 +65,78 @@ const ForgotPassword = () => {
   });
 
   // Submit Handler
-  const onSubmit = async (data: z.infer<typeof ForgotPasswordSchema>) => {
-    forgotPasswordMutation.mutate(data);
+  const onSubmit = async (data: z.infer<typeof ResetPasswordSchema>) => {
+    resetPasswordMutation.mutate(data);
     console.log(data);
   };
-
   // Component
   return (
-    <div className="flex justify-center">
-      <Card className="w-[400px] shadow-md">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center">
-            Forgot Password
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col space-y-4"
-            >
-              <div className="space-y-4">
-                {/* Email */}
-                <RHFInput
-                  control={form.control}
-                  name="email"
-                  label="Email"
-                  placeholder="john.doe@example.com"
-                  type="email"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <Button type="submit" disabled={forgotPasswordMutation.isPending}>
-                {forgotPasswordMutation.isPending
-                  ? "Sending password reset..."
-                  : "Send Password Reset"}
-              </Button>
-
-              {/* Don't have an account? */}
-              <div className="flex mt-4 text-center text-sm justify-center">
-                Go back to&nbsp;
-                <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
-                  Sign in
-                </Link>
-                &nbsp;<p>or</p>&nbsp;
-                <Link
-                  to={ClientRoute.Auth.REGISTER}
-                  className="text-totysseyBlue"
+    <>
+      {isValid ? (
+        <p>Invalid Code</p>
+      ) : (
+        <div className="flex justify-center">
+          <Card className="w-[400px] shadow-md">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold text-center">
+                Reset Password
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex flex-col space-y-4"
                 >
-                  Sign up
-                </Link>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+                  {/* Password */}
+                  <RHFInput
+                    control={form.control}
+                    name="password"
+                    label="Password"
+                    placeholder="Password"
+                    type="password"
+                  />
+
+                  {/* Confirm Password */}
+                  <RHFInput
+                    control={form.control}
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    placeholder="Confirm Password"
+                    type="password"
+                  />
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    disabled={resetPasswordMutation.isPending}
+                  >
+                    {resetPasswordMutation.isPending
+                      ? "Resetting password..."
+                      : "Reset Password"}
+                  </Button>
+
+                  {/* Don't have an account? */}
+                  {/* <div className="flex mt-4 text-center text-sm justify-center">
+                  Go back to&nbsp;
+                  <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+                    Sign in
+                  </Link>
+                  &nbsp;<p>or</p>&nbsp;
+                  <Link
+                    to={ClientRoute.Auth.REGISTER}
+                    className="text-totysseyBlue"
+                  >
+                    Sign up
+                  </Link>
+                </div> */}
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </>
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

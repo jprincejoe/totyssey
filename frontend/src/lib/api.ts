@@ -4,6 +4,7 @@ import {
   LoginSchema,
   ForgotPasswordSchema,
   VerificationCodeSchema,
+  ResetPasswordSchema,
 } from "@/validation/authValidation";
 import { RegisterSchema } from "@/validation/authValidation";
 import { z } from "zod";
@@ -21,3 +22,7 @@ export const verifyEmail = async (
 export const forgotPassword = async (
   data: z.infer<typeof ForgotPasswordSchema>
 ) => API.post(ServerRoute.Auth.FORGOT_PASSWORD, data);
+
+export const resetPassword = async (
+  data: z.infer<typeof ResetPasswordSchema>
+) => API.post(ServerRoute.Auth.RESET_PASSWORD, data);
