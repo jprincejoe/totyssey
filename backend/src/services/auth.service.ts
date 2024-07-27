@@ -1,5 +1,6 @@
 //#region Imports
 
+import { APP_ORIGIN } from "../constants/env";
 import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
@@ -33,6 +34,8 @@ import { sendMail } from "../utils/sendMail";
 import { buildVerificationEmailRoute } from "../utils/url";
 
 export type CreateAccountParams = {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
@@ -51,6 +54,8 @@ export const createAccount = async (data: CreateAccountParams) => {
 
   // create user
   const user = await UserModel.create({
+    firstName: data.firstName,
+    lastName: data.lastName,
     email: data.email,
     password: data.password,
   });
@@ -65,17 +70,19 @@ export const createAccount = async (data: CreateAccountParams) => {
     expiresAt: oneYearFromNow(),
   });
 
+  console.log(verificationCode._id);
   // send verification email
-  const emailUrl = Route.Auth.VERIFY_EMAIL + `/${verificationCode._id}`;
+  const emailUrl =
+    APP_ORIGIN + Route.Auth.VERIFY_EMAIL + `/${verificationCode._id}`;
+
+  console.log(emailUrl);
 
   const result = await sendMail({
     to: user.email,
     ...getVerifyEmailTemplate(emailUrl),
   });
 
-  // if (error) {
-  //   console.log(error);
-  // }
+  console.log(result);
 
   // create session
   const session = await SessionModel.create({
@@ -112,12 +119,12 @@ export const loginUser = async (data: LoginUserParams) => {
   // get the user by email
   const user = await UserModel.findOne({ email: data.email });
 
-  appAssert(user, UNAUTHORIZED, "User does not exist");
+  appAssert(user, UNAUTHORIZED, "Invalid credentials");
 
   // validate password from the request
   const passwordIsValid = await user.comparePassword(data.password);
 
-  appAssert(passwordIsValid, UNAUTHORIZED, "Passwords do not match");
+  appAssert(passwordIsValid, UNAUTHORIZED, "Invalid credentials");
 
   // store user id
   const userId = user._id;

@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <div className="bg-totysseyOrange py-10">
+    <div className="bg-totysseyOrange py-4">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* Logo */}
         <Logo colorScheme="white" className="h-[60px]" />

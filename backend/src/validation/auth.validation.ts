@@ -3,6 +3,7 @@ import { isValidObjectId } from "../utils/mongoDb";
 
 //#region  Validators
 
+const nameValidator = z.string().min(1).max(255);
 const emailValidator = z.string().email().min(1).max(255);
 const passwordValidator = z.string().min(6).max(255);
 const verificationCodeValidator = z
@@ -20,6 +21,8 @@ const verificationCodeValidator = z
 // user registration schema
 export const registerSchema = z
   .object({
+    firstName: nameValidator,
+    lastName: nameValidator,
     email: emailValidator,
     password: passwordValidator,
     confirmPassword: z.string().min(6).max(255),
@@ -34,11 +37,6 @@ export const loginSchema = z.object({
   email: emailValidator,
   password: passwordValidator,
 });
-
-// email verification code schema
-// export const verificationCodeSchema = z.object({
-//   code: verificationCodeValidator,
-// });
 
 export const verificationCodeSchema = verificationCodeValidator;
 

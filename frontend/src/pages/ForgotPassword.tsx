@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/validation/authValidation";
+import { ForgotPasswordSchema } from "@/validation/authValidation";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import RHFInput from "@/components/RHFInput";
@@ -17,27 +17,26 @@ import { ClientRoute } from "@/constants/clientRoutes";
 
 //#endregion
 
-type LoginFormData = z.infer<typeof LoginSchema>;
+type ForgotPasswordFormData = z.infer<typeof ForgotPasswordSchema>;
 
-const defaultLoginFormValues: LoginFormData = {
+const defaultFormValues: ForgotPasswordFormData = {
   email: "",
-  password: "",
 };
 
-const Login = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
 
   // RHF Form
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: defaultLoginFormValues,
+  const form = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: defaultFormValues,
   });
 
   // RQ Mutate
-  const loginMutation = useMutation({
-    mutationFn: apiClient.login,
+  const forgotPasswordMutation = useMutation({
+    mutationFn: apiClient.forgotPassword,
     onSuccess: () => {
-      toast.success("Signed in!");
+      toast.success("Password reset sent!");
       navigate("/", {
         replace: true,
       });
@@ -49,18 +48,18 @@ const Login = () => {
   });
 
   // Submit Handler
-  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
-    loginMutation.mutate(data);
+  const onSubmit = async (data: z.infer<typeof ForgotPasswordSchema>) => {
+    forgotPasswordMutation.mutate(data);
     console.log(data);
   };
 
   // Component
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
+    <div className="flex justify-center">
       <Card className="w-[400px] shadow-md">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">
-            Sign-In
+            Forgot Password
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -78,32 +77,22 @@ const Login = () => {
                   placeholder="john.doe@example.com"
                   type="email"
                 />
-
-                {/* Password */}
-                <RHFInput
-                  control={form.control}
-                  name="password"
-                  label="Password"
-                  placeholder="Password"
-                  type="password"
-                />
               </div>
 
-              {/* Forgot Password */}
-              <Link
-                to={ClientRoute.Auth.FORGOT_PASSWORD}
-                className="ml-auto inline-block text-sm"
-              >
-                <p className="text-totysseyBlue">Forgot password?</p>
-              </Link>
-
-              <Button type="submit" disabled={loginMutation.isPending}>
-                {loginMutation.isPending ? "Logging in..." : "Login"}
+              {/* Submit Button */}
+              <Button type="submit" disabled={forgotPasswordMutation.isPending}>
+                {forgotPasswordMutation.isPending
+                  ? "Sending password reset..."
+                  : "Send Password Reset"}
               </Button>
 
               {/* Don't have an account? */}
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
+              <div className="flex mt-4 text-center text-sm justify-center">
+                Go back to&nbsp;
+                <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+                  Sign in
+                </Link>
+                &nbsp;<p>or</p>&nbsp;
                 <Link
                   to={ClientRoute.Auth.REGISTER}
                   className="text-totysseyBlue"
@@ -119,4 +108,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
