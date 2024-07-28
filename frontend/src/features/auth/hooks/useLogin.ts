@@ -3,9 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TLogin } from "../types/authTypes";
+import { TLogin, TUser } from "../types/authTypes";
 import { authApi } from "../api/apiAuth";
 import { authSchema } from "../validation/authValidation";
+import { useStore } from "@/stores/store";
 
 // Default Values
 const defaultValues: TLogin = {
@@ -16,6 +17,7 @@ const defaultValues: TLogin = {
 export const useLogin = () => {
   // Navigation
   const navigate = useNavigate();
+  const setUser = useStore((state) => state.setUser);
 
   // Form
   const form = useForm<TLogin>({
@@ -24,7 +26,8 @@ export const useLogin = () => {
   });
 
   // On Success
-  const onSuccess = () => {
+  const onSuccess = (user: TUser | null) => {
+    setUser(user);
     toast.success("Signed in!");
     navigate("/", {
       replace: true,
@@ -47,7 +50,6 @@ export const useLogin = () => {
   // Submit Handler
   const onSubmit = async (data: TLogin) => {
     mutation.mutate(data);
-    console.log(data);
   };
 
   return { form, onSubmit, mutation };

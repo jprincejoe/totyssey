@@ -2,10 +2,13 @@ import API from "@/config/apiClient";
 import { ServerRoute } from "@/constants/serverRoutes";
 import { z } from "zod";
 import { authSchema } from "../validation/authValidation";
+import { TUser } from "@/types/userType";
 
 export const authApi = {
-  login: async (data: z.infer<typeof authSchema.Login>) =>
-    API.post(ServerRoute.Auth.LOGIN, data),
+  login: async (data: z.infer<typeof authSchema.Login>): Promise<TUser> => {
+    const response = await API.post<TUser>(ServerRoute.Auth.LOGIN, data);
+    return response;
+  },
 
   register: async (data: z.infer<typeof authSchema.Register>) =>
     API.post(ServerRoute.Auth.REGISTER, data),
@@ -19,5 +22,11 @@ export const authApi = {
   resetPassword: async (data: z.infer<typeof authSchema.ResetPassword>) =>
     API.post(ServerRoute.Auth.RESET_PASSWORD, data),
 
-  getUser: async () => API.get(ServerRoute.User.BASE),
+  // getUser: async () => API.get(ServerRoute.User.BASE),
+  // getUser: async () => {
+  //   const response = await API.get(ServerRoute.User.BASE);
+  //   console.log("API RESPONSE:", response);
+  //   return response;
+  // },
+  // Define a function to get the user
 };

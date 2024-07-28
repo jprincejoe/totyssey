@@ -7,13 +7,21 @@ import { ClientRoute } from "./constants/clientRoutes";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import AppContainer from "./components/AppContainer";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path={ClientRoute.Root.BASE} element={<AppContainer />}>
-        {/* Home */}
+      {/* Home */}
+      <Route
+        path={ClientRoute.Root.BASE}
+        element={
+          <Layout heroVisibility={true}>
+            <HomePage />
+          </Layout>
+        }
+      />
+
+      {/* <Route path={ClientRoute.Root.BASE} element={<AppContainer />}>
         <Route
           index
           element={
@@ -22,7 +30,7 @@ const AppRoutes = () => {
             </Layout>
           }
         />
-      </Route>
+      </Route> */}
 
       {/* Register */}
       <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />

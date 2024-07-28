@@ -44,12 +44,17 @@ export const loginHandler = catchErrors(async (req, res) => {
   const request = loginSchema.parse(req.body);
 
   // call service
-  const { accessToken, refreshToken } = await loginUser(request);
+  const { accessToken, refreshToken, user } = await loginUser(request);
 
   // set cookies
-  return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
-    message: "Login successful",
-  });
+  // return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
+  //   message: "Login successful",
+  // });
+  return setAuthCookies({ res, accessToken, refreshToken })
+    .status(OK)
+    .json({
+      ...user,
+    });
 });
 
 export const logoutHandler = catchErrors(async (req, res) => {
