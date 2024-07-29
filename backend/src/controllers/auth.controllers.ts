@@ -1,5 +1,6 @@
 //#region Imports
 
+import AppErrorCode from "../constants/appErrorCode";
 import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
 import Params from "../constants/params";
 import TokenType from "../constants/tokens";
@@ -46,10 +47,7 @@ export const loginHandler = catchErrors(async (req, res) => {
   // call service
   const { accessToken, refreshToken, user } = await loginUser(request);
 
-  // set cookies
-  // return setAuthCookies({ res, accessToken, refreshToken }).status(OK).json({
-  //   message: "Login successful",
-  // });
+  // Set auth cookies
   return setAuthCookies({ res, accessToken, refreshToken })
     .status(OK)
     .json(user);
@@ -81,7 +79,12 @@ export const refreshHandler = catchErrors(async (req, res) => {
     | undefined;
 
   // Verify we have a refresh token
-  appAssert(refreshToken, UNAUTHORIZED, "Refresh token not found");
+  appAssert(
+    refreshToken,
+    UNAUTHORIZED,
+    "Refresh token not found",
+    AppErrorCode.INVALID_REFRESH_TOKEN
+  );
 
   // get new access and refresh tokens
   const { accessToken, newRefreshToken } = await refreshUserAccessToken(

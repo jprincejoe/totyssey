@@ -4,6 +4,18 @@ import { z } from "zod";
 import AppError from "../utils/AppError";
 import { clearAuthCookies } from "../utils/cookies";
 import { Route } from "../constants/routes";
+import AppErrorCode from "../constants/appErrorCode";
+
+// Standard error response format
+const errorResponse = (
+  httpStatusCode: number,
+  message: string,
+  appErrorCode: AppErrorCode
+) => ({
+  httpStatusCode,
+  message,
+  appErrorCode,
+});
 
 // Error for Zod validation
 const handleZodError = (res: Response, error: z.ZodError) => {
@@ -12,18 +24,31 @@ const handleZodError = (res: Response, error: z.ZodError) => {
     message: err.message,
   }));
 
-  return res.status(BAD_REQUEST).json({
-    message: "Bad request",
-    errors,
-  });
+  // Log array of errors since not sending to frontend
+  console.log(errors);
+
+  // Construct error response
+  const errResponse = errorResponse(
+    BAD_REQUEST,
+    "Invalid or missing fields",
+    AppErrorCode.VALIDATION_ERROR
+  );
+
+  // Return error
+  return res.status(BAD_REQUEST).json(errResponse);
 };
 
 // Error for custom App Error
 const handleAppError = (res: Response, error: AppError) => {
-  return res.status(error.statusCode).json({
-    message: error.message,
-    errorCode: error.errorCode,
-  });
+  // Construct error response
+  const errResponse = errorResponse(
+    error.statusCode,
+    error.message,
+    error.errorCode || AppErrorCode.UNKNOWN_ERROR
+  );
+
+  // Return error
+  return res.status(error.statusCode).json(errResponse);
 };
 
 // custom error handler method
@@ -46,7 +71,14 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   }
 
   // Otherwise, return internal server error 500
-  return res.status(INTERNAL_SERVER_ERROR).send("Internal Server Error");
+  const errResponse = errorResponse(
+    INTERNAL_SERVER_ERROR,
+    "Internal server error",
+    AppErrorCode.INTERNAL_SERVER_ERROR
+  );
+
+  // Return error
+  return res.status(INTERNAL_SERVER_ERROR).json(errResponse);
 };
 
 export default errorHandler;

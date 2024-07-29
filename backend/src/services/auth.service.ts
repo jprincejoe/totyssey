@@ -1,5 +1,6 @@
 //#region Imports
 
+import AppErrorCode from "../constants/appErrorCode";
 import { APP_ORIGIN } from "../constants/env";
 import {
   CONFLICT,
@@ -50,7 +51,12 @@ export const createAccount = async (data: CreateAccountParams) => {
   });
 
   // if user exists throw error
-  appAssert(!existingUser, CONFLICT, "Email already in use");
+  appAssert(
+    !existingUser,
+    CONFLICT,
+    "Email already in use",
+    AppErrorCode.RESOURCE_CONFLICT
+  );
 
   // create user
   const user = await UserModel.create({
@@ -119,12 +125,22 @@ export const loginUser = async (data: LoginUserParams) => {
   // get the user by email
   const user = await UserModel.findOne({ email: data.email });
 
-  appAssert(user, UNAUTHORIZED, "Invalid credentials");
+  appAssert(
+    user,
+    UNAUTHORIZED,
+    "Invalid credentials",
+    AppErrorCode.INVALID_INPUT
+  );
 
   // validate password from the request
   const passwordIsValid = await user.comparePassword(data.password);
 
-  appAssert(passwordIsValid, UNAUTHORIZED, "Invalid credentials");
+  appAssert(
+    passwordIsValid,
+    UNAUTHORIZED,
+    "Invalid credentials",
+    AppErrorCode.INVALID_INPUT
+  );
 
   // store user id
   const userId = user._id;
@@ -162,7 +178,12 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
   const { payload } = verifyRefreshToken(refreshToken);
 
   // verify that there is a payload
-  appAssert(payload, UNAUTHORIZED, "Invalid refresh token");
+  appAssert(
+    payload,
+    UNAUTHORIZED,
+    "Invalid refresh token",
+    AppErrorCode.INVALID_REFRESH_TOKEN
+  );
 
   // find session
   const session = await SessionModel.findById(payload.sessionId);
@@ -171,7 +192,8 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
   appAssert(
     session && session.expiresAt.getTime() > Date.now(),
     UNAUTHORIZED,
-    "Session expired or not found"
+    "Session expired or not found",
+    AppErrorCode.UNAUTHORIZED_ACCESS
   );
 
   // create new session expires date
@@ -211,7 +233,8 @@ export const verifyEmail = async (code: string) => {
   appAssert(
     verificationCode,
     NOT_FOUND,
-    "Invalid or expired verification code"
+    "Invalid or expired verification code",
+    AppErrorCode.RESOURCE_NOT_FOUND
   );
 
   // update user verified to true
@@ -224,7 +247,12 @@ export const verifyEmail = async (code: string) => {
   );
 
   // verify the user has been verified
-  appAssert(updatedUser, INTERNAL_SERVER_ERROR, "Failed to verify email");
+  appAssert(
+    updatedUser,
+    INTERNAL_SERVER_ERROR,
+    "Failed to verify email",
+    AppErrorCode.RESOURCE_CREATION_FAILED
+  );
 
   // delete the verification code
   await verificationCode.deleteOne();
@@ -239,7 +267,7 @@ export const verifyEmail = async (code: string) => {
 export const sendForgotPasswordEmail = async (email: string) => {
   // get the user by email
   const user = await UserModel.findOne({ email });
-  appAssert(user, NOT_FOUND, "User not found");
+  appAssert(user, NOT_FOUND, "User not found", AppErrorCode.RESOURCE_NOT_FOUND);
 
   // check the rate limit
   const fiveMinAgo = fiveMinutesAgo();
@@ -253,7 +281,8 @@ export const sendForgotPasswordEmail = async (email: string) => {
   appAssert(
     count < 2,
     TOO_MANY_REQUESTS,
-    "Too many password reset requests - please try again later"
+    "Too many password reset requests - please try again later",
+    AppErrorCode.TOO_MANY_REQUESTS
   );
 
   // create verification code
@@ -268,7 +297,8 @@ export const sendForgotPasswordEmail = async (email: string) => {
   appAssert(
     verificationCode,
     INTERNAL_SERVER_ERROR,
-    "Error creating verification code"
+    "Error creating verification code",
+    AppErrorCode.RESOURCE_CREATION_FAILED
   );
 
   // build url for email template
@@ -284,7 +314,8 @@ export const sendForgotPasswordEmail = async (email: string) => {
   appAssert(
     data?.id,
     INTERNAL_SERVER_ERROR,
-    `${error?.name} - ${error?.message}`
+    `${error?.name} - ${error?.message}`,
+    AppErrorCode.INTERNAL_SERVER_ERROR
   );
 
   // return success
@@ -321,7 +352,8 @@ export const resetPassword = async ({
   appAssert(
     foundVerificationCode,
     NOT_FOUND,
-    "Invalid or expired verification code"
+    "Invalid or expired verification code",
+    AppErrorCode.RESOURCE_NOT_FOUND
   );
 
   // update the user's password
@@ -336,7 +368,12 @@ export const resetPassword = async ({
   );
 
   // verify user was updated successfully
-  appAssert(updatedUser, INTERNAL_SERVER_ERROR, "Faild to reset password");
+  appAssert(
+    updatedUser,
+    INTERNAL_SERVER_ERROR,
+    "Faild to reset password",
+    AppErrorCode.RESOURCE_CREATION_FAILED
+  );
 
   // delete the verification code after it was used
   await foundVerificationCode.deleteOne();

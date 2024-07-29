@@ -1,3 +1,4 @@
+import AppErrorCode from "../constants/appErrorCode";
 import { NOT_FOUND, OK } from "../constants/http";
 import RequestKeys from "../constants/requestKeys";
 import UserModel from "../models/user.model";
@@ -10,7 +11,7 @@ export const getUserHandler = catchErrors(async (req, res) => {
   const user = await UserModel.findById(req[RequestKeys.USER_ID_KEY]);
 
   // verify we have a user
-  appAssert(user, NOT_FOUND, "User not found");
+  appAssert(user, NOT_FOUND, "User not found", AppErrorCode.RESOURCE_NOT_FOUND);
 
   // return success
   return res.status(OK).json(user.omitPassword());
