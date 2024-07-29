@@ -10,7 +10,7 @@ const Footer = () => {
 
         {/* Links */}
         <span className="text-white font-bold flex gap-4">
-          <Link to="#">Privacy Policy</Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
           <Link to="#">Terms of Service</Link>
         </span>
       </div>

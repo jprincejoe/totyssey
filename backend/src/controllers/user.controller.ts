@@ -5,6 +5,7 @@ import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
 
 export const getUserHandler = catchErrors(async (req, res) => {
+  console.log("BACKEND: inGetUserHandler...");
   // get user with matching id
   const user = await UserModel.findById(req[RequestKeys.USER_ID_KEY]);
 

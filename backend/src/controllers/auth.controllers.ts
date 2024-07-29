@@ -52,9 +52,7 @@ export const loginHandler = catchErrors(async (req, res) => {
   // });
   return setAuthCookies({ res, accessToken, refreshToken })
     .status(OK)
-    .json({
-      ...user,
-    });
+    .json(user);
 });
 
 export const logoutHandler = catchErrors(async (req, res) => {

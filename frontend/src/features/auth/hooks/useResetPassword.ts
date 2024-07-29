@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { TResetPassword } from "../types/authTypes";
 import { validateSearchParam } from "@/utils/searchParams";
 import Params from "@/constants/params";
-import { authApi } from "../api/apiAuth";
+import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
 
 // Default Values

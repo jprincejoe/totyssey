@@ -2,7 +2,7 @@ import API from "@/config/apiClient";
 import { ServerRoute } from "@/constants/serverRoutes";
 import { z } from "zod";
 import { authSchema } from "../validation/authValidation";
-import { TUser } from "@/types/userType";
+import { TUser } from "../types/authTypes";
 
 export const authApi = {
   login: async (data: z.infer<typeof authSchema.Login>): Promise<TUser> => {

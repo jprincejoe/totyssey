@@ -3,7 +3,7 @@ import Params from "@/constants/params";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { authApi } from "../api/apiAuth";
+import { authApi } from "../api/authApi";
 
 export const useVerifyEmail = () => {
   // Navigation

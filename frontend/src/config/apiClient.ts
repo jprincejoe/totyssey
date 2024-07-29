@@ -11,6 +11,13 @@ const options = {
   withCredentials: true,
 };
 
+const TokenRefreshClient = axios.create(options);
+
+// Middleware
+TokenRefreshClient.interceptors.response.use(
+  <T>(response: AxiosResponse<T>): T => response.data
+);
+
 // Axios instance
 const API = axios.create(options);
 
@@ -20,6 +27,12 @@ API.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       const { status, data } = error.response;
+
+      // try to hit refresh endpoint
+      if (status === 401 && data?.errorCode === "InvalidAccessToken") {
+        // do something
+      }
+
       console.log(data);
       if (data && typeof data === "object") {
         return Promise.reject({ status, ...data });

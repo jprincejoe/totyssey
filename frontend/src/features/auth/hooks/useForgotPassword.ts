@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TForgotPassword } from "../types/authTypes";
-import { authApi } from "../api/apiAuth";
+import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
 
 // Default Values
