@@ -1,18 +1,14 @@
 import Footer from "@/layouts/components/Footer";
 import Header from "@/layouts/components/Header";
-import Hero from "@/layouts/components/Hero";
+import { Outlet } from "react-router-dom";
 
-type Props = {
-  heroVisibility?: boolean;
-  children: React.ReactNode;
-};
-
-const Layout = ({ heroVisibility = false, children }: Props) => {
+const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      {heroVisibility && <Hero />}
-      <div className="container mx-auto flex-1 py-10">{children}</div>
+      <div className="flex-1 py-10">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   );

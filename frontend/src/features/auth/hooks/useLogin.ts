@@ -2,12 +2,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { TLogin, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
-import { useStore } from "@/stores/store";
 import { ClientRoute } from "@/constants/clientRoutes";
+import { toast } from "react-toastify";
+import { useAuthStore } from "@/stores/authStore";
+import { useLayoutEffect } from "react";
 
 // Default Values
 const defaultValues: TLogin = {
@@ -18,7 +19,7 @@ const defaultValues: TLogin = {
 export const useLogin = () => {
   // Navigation
   const navigate = useNavigate();
-  const { setUser, logout } = useStore();
+  const { user, setUser } = useAuthStore();
 
   // Form
   const form = useForm<TLogin>({
@@ -26,21 +27,25 @@ export const useLogin = () => {
     defaultValues,
   });
 
+  // Log user state whenever it changes
+  useLayoutEffect(() => {
+    if (user) {
+      navigate("/", {
+        replace: true,
+      });
+    }
+  }, [user]);
+
   // On Success
-  const onSuccess = (user: TUser | null) => {
-    setUser(user);
-    // toast.success("Signed in!");
-    navigate("/", {
-      replace: true,
-    });
+  const onSuccess = (data: TUser) => {
+    setUser(data);
   };
 
   // On Error
   const onError = (error: Error) => {
     console.log(error.message);
-    logout();
     navigate(ClientRoute.Auth.LOGIN);
-    // toast.error(error.message);
+    toast.error(error.message);
   };
 
   // Mutation

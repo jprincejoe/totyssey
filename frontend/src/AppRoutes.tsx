@@ -10,121 +10,37 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import { setNavigate } from "./lib/navigation";
 import UserProfilePage from "./pages/UserProfilePage";
-import PrivateRoute from "./components/PrivateRoute";
-import { userApi } from "./features/user/api/userApi";
-import { useStore } from "./stores/store";
-import { useQuery } from "@tanstack/react-query";
-import { TUser } from "./features/auth/types/authTypes";
-import { useEffect } from "react";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
   const navigate = useNavigate();
   setNavigate(navigate);
 
-  const { setUser, logout } = useStore();
-
-  const { data, isLoading, isError, isSuccess, error, refetch } =
-    useQuery<TUser>({
-      queryKey: ["getUser"],
-      queryFn: () => userApi.getUser(),
-      enabled: false, // Initially disabled
-    });
-
-  useEffect(() => {
-    // Fetch user data on initial render
-    refetch();
-  }, [refetch]);
-
-  useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-
-    // if (isError) {
-    //   console.error(error);
-    //   logout();
-    // }
-
-    if (isSuccess && data) {
-      setUser(data);
-    }
-  }, [isLoading, isError, isSuccess, data, error, logout, navigate, setUser]);
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
   return (
     <Routes>
-      {/* Home */}
-      <Route
-        path={ClientRoute.Root.BASE}
-        element={
-          <Layout heroVisibility={true}>
-            <HomePage />
-          </Layout>
-        }
-      />
-
-      <Route element={<PrivateRoute />}>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="user-profile" element={<ProtectedRoute />}>
+          <Route index element={<UserProfilePage />} />
+        </Route>
+        <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />
+        <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />
         <Route
-          path="/user-profile"
-          element={
-            <Layout>
-              <UserProfilePage />
-            </Layout>
-          }
+          path={ClientRoute.Auth.VERIFY_EMAIL}
+          element={<VerifyEmailPage />}
         />
+        <Route
+          path={ClientRoute.Auth.FORGOT_PASSWORD}
+          element={<ForgotPasswordPage />}
+        />
+        <Route
+          path={ClientRoute.Auth.RESET_PASSWORD}
+          element={<ResetPasswordPage />}
+        />
+        <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="*" element={<Navigate to={ClientRoute.Root.BASE} />} />
       </Route>
-
-      {/* Register */}
-      <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />
-
-      {/* Login */}
-      <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />
-
-      {/* Verify Email */}
-      <Route
-        path={ClientRoute.Auth.VERIFY_EMAIL}
-        element={
-          <Layout>
-            <VerifyEmailPage />
-          </Layout>
-        }
-      />
-
-      {/* Forgot Password */}
-      <Route
-        path={ClientRoute.Auth.FORGOT_PASSWORD}
-        element={
-          <Layout>
-            <ForgotPasswordPage />
-          </Layout>
-        }
-      />
-
-      {/* Reset Password */}
-      <Route
-        path={ClientRoute.Auth.RESET_PASSWORD}
-        element={
-          <Layout>
-            <ResetPasswordPage />
-          </Layout>
-        }
-      />
-
-      <Route
-        path={"/privacy-policy"}
-        element={
-          <Layout>
-            <PrivacyPolicyPage />
-          </Layout>
-        }
-      />
-
-      {/* Catch All */}
-      <Route path="/*" element={<Navigate to={ClientRoute.Root.BASE} />} />
     </Routes>
   );
 };

@@ -49,9 +49,9 @@ API.interceptors.response.use(
             return TokenRefreshClient(config);
           }
         } catch (error) {
-          console.log("In error in refresh apiClient");
+          console.log("Unable to refresh token for client");
           // remove queries from cache
-          queryClient.clear();
+          // queryClient.clear();
           navigate(ClientRoute.Root.BASE, {
             state: {
               redirectUrl: window.location.pathname,
