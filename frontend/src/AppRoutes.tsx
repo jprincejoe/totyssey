@@ -8,24 +8,52 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
-import { useStore } from "./stores/store";
-import { useUser } from "./features/user/hooks/useUser";
-import { useEffect } from "react";
 import { setNavigate } from "./lib/navigation";
+import UserProfilePage from "./pages/UserProfilePage";
+import PrivateRoute from "./components/PrivateRoute";
+import { userApi } from "./features/user/api/userApi";
+import { useStore } from "./stores/store";
+import { useQuery } from "@tanstack/react-query";
+import { TUser } from "./features/auth/types/authTypes";
+import { useEffect } from "react";
 
 const AppRoutes = () => {
+  // For refresh token navigation in api client
   const navigate = useNavigate();
   setNavigate(navigate);
 
-  const setUser = useStore((state) => state.setUser);
+  const { setUser, logout } = useStore();
 
-  const { data: user } = useUser();
+  const { data, isLoading, isError, isSuccess, error, refetch } =
+    useQuery<TUser>({
+      queryKey: ["getUser"],
+      queryFn: () => userApi.getUser(),
+      enabled: false, // Initially disabled
+    });
 
   useEffect(() => {
-    if (user !== undefined) {
-      setUser(user);
+    // Fetch user data on initial render
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
     }
-  }, [setUser]);
+
+    // if (isError) {
+    //   console.error(error);
+    //   logout();
+    // }
+
+    if (isSuccess && data) {
+      setUser(data);
+    }
+  }, [isLoading, isError, isSuccess, data, error, logout, navigate, setUser]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Routes>
@@ -39,16 +67,16 @@ const AppRoutes = () => {
         }
       />
 
-      {/* <Route path={ClientRoute.Root.BASE} element={<AppContainer />}>
+      <Route element={<PrivateRoute />}>
         <Route
-          index
+          path="/user-profile"
           element={
-            <Layout heroVisibility={true}>
-              <HomePage />
+            <Layout>
+              <UserProfilePage />
             </Layout>
           }
         />
-      </Route> */}
+      </Route>
 
       {/* Register */}
       <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />

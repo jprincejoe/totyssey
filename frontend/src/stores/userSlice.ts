@@ -7,6 +7,7 @@ type State = {
 
 type Action = {
   setUser: (user: TUser | null) => void;
+  logout: () => void;
 };
 
 export type UserSlice = State & Action;
@@ -21,5 +22,9 @@ export const createUserSlice: StateCreator<
   setUser: (user) =>
     set((state) => {
       state.user = user;
+    }),
+  logout: () =>
+    set((state) => {
+      state.user = null;
     }),
 });

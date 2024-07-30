@@ -7,6 +7,7 @@ import { TLogin, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
 import { useStore } from "@/stores/store";
+import { ClientRoute } from "@/constants/clientRoutes";
 
 // Default Values
 const defaultValues: TLogin = {
@@ -17,7 +18,7 @@ const defaultValues: TLogin = {
 export const useLogin = () => {
   // Navigation
   const navigate = useNavigate();
-  const setUser = useStore((state) => state.setUser);
+  const { setUser, logout } = useStore();
 
   // Form
   const form = useForm<TLogin>({
@@ -28,7 +29,7 @@ export const useLogin = () => {
   // On Success
   const onSuccess = (user: TUser | null) => {
     setUser(user);
-    toast.success("Signed in!");
+    // toast.success("Signed in!");
     navigate("/", {
       replace: true,
     });
@@ -37,7 +38,9 @@ export const useLogin = () => {
   // On Error
   const onError = (error: Error) => {
     console.log(error.message);
-    toast.error(error.message);
+    logout();
+    navigate(ClientRoute.Auth.LOGIN);
+    // toast.error(error.message);
   };
 
   // Mutation

@@ -19,7 +19,7 @@ const accessTokenOptions = (): CookieOptions => ({
 const refreshTokenOptions = (): CookieOptions => ({
   ...defaultCookieOptions,
   expires: thirtyDaysFromNow(),
-  path: Route.Auth.BASE + Route.Auth.REFRESH,
+  // path: Route.Auth.BASE + Route.Auth.REFRESH,
 });
 
 type Params = {
@@ -37,6 +37,6 @@ export const clearAuthCookies = (res: Response) => {
   return res
     .clearCookie(TokenType.ACCESS_TOKEN)
     .clearCookie(TokenType.REFRESH_TOKEN, {
-      path: Route.Auth.BASE + Route.Auth.REFRESH,
+      // path: Route.Auth.BASE + Route.Auth.REFRESH,
     });
 };

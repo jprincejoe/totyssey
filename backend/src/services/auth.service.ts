@@ -76,19 +76,14 @@ export const createAccount = async (data: CreateAccountParams) => {
     expiresAt: oneYearFromNow(),
   });
 
-  console.log(verificationCode._id);
   // send verification email
   const emailUrl =
     APP_ORIGIN + Route.Auth.VERIFY_EMAIL + `/${verificationCode._id}`;
-
-  console.log(emailUrl);
 
   const result = await sendMail({
     to: user.email,
     ...getVerifyEmailTemplate(emailUrl),
   });
-
-  console.log(result);
 
   // create session
   const session = await SessionModel.create({
