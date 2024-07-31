@@ -3,7 +3,6 @@ import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "../constants/http";
 import { z } from "zod";
 import AppError from "../utils/AppError";
 import { clearAuthCookies } from "../utils/cookies";
-import { Route } from "../constants/routes";
 import AppErrorCode from "../constants/appErrorCode";
 
 // Standard error response format
@@ -56,7 +55,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   console.log(`PATH: ${req.path}`, error);
 
   // if error is on token refresh then clear cookies
-  if (req.path === Route.Auth.BASE + Route.Auth.REFRESH) {
+  if (req.path === "/auth/refresh") {
     clearAuthCookies(res);
   }
 

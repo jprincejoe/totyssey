@@ -4,7 +4,7 @@ const UserProfilePage = () => {
   const { user } = useAuthStore();
 
   return (
-    <div>
+    <div className="container flex flex-col">
       <div className="text-2xl font-bold">Hello {user?.firstName}</div>
       <div>ID: </div>
       <div className="">{user?._id}</div>

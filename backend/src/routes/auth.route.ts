@@ -8,16 +8,15 @@ import {
   verifyEmailHandler,
   resetPasswordHandler,
 } from "../controllers/auth.controllers";
-import { Route } from "../constants/routes";
-
+import Params from "../constants/params";
 const authRoutes = Router();
 
-authRoutes.post(Route.Auth.REGISTER, registerHandler);
-authRoutes.post(Route.Auth.LOGIN, loginHandler);
-authRoutes.get(Route.Auth.REFRESH, refreshHandler);
-authRoutes.get(Route.Auth.LOGOUT, logoutHandler);
-authRoutes.get(Route.Auth.VERIFY_EMAIL_WITH_PARAMS, verifyEmailHandler);
-authRoutes.post(Route.Auth.FORGOT_PASSWORD, forgotPasswordHandler);
-authRoutes.post(Route.Auth.RESET_PASSWORD, resetPasswordHandler);
+authRoutes.post("/register", registerHandler);
+authRoutes.post("/login", loginHandler);
+authRoutes.get("/refresh", refreshHandler);
+authRoutes.get("/logout", logoutHandler);
+authRoutes.get(`email/verify/:${Params.Email.CODE}`, verifyEmailHandler);
+authRoutes.post("/password/forgot", forgotPasswordHandler);
+authRoutes.post("/password/reset", resetPasswordHandler);
 
 export default authRoutes;

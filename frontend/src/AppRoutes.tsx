@@ -11,6 +11,7 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import { setNavigate } from "./lib/navigation";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EventDetailsPage from "./pages/AddEventPage";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
@@ -21,8 +22,12 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="user-profile" element={<ProtectedRoute />}>
+        <Route path={ClientRoute.User.PROFILE} element={<ProtectedRoute />}>
           <Route index element={<UserProfilePage />} />
+        </Route>
+
+        <Route path={ClientRoute.Event.CREATE} element={<ProtectedRoute />}>
+          <Route index element={<EventDetailsPage />} />
         </Route>
         <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />
         <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />

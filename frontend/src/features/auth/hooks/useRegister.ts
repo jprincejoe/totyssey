@@ -3,9 +3,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TRegister } from "../types/authTypes";
+import { TRegister, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
+import { useAuthStore } from "@/stores/authStore";
+import { useLayoutEffect } from "react";
 
 // Default Values
 const defaultValues: TRegister = {
@@ -19,6 +21,7 @@ const defaultValues: TRegister = {
 export const useRegister = () => {
   // Navigation
   const navigate = useNavigate();
+  const { user, setUser } = useAuthStore();
 
   // Form
   const form = useForm<TRegister>({
@@ -26,12 +29,19 @@ export const useRegister = () => {
     defaultValues,
   });
 
+  // Log user state whenever it changes
+  useLayoutEffect(() => {
+    if (user) {
+      navigate("/", {
+        replace: true,
+      });
+    }
+  }, [user]);
+
   // On Success
-  const onSuccess = () => {
+  const onSuccess = (data: TUser) => {
     toast.success("Account created!");
-    navigate("/", {
-      replace: true,
-    });
+    setUser(data);
   };
 
   // On Error
@@ -50,7 +60,6 @@ export const useRegister = () => {
   // Submit Handler
   const onSubmit = async (data: TRegister) => {
     mutation.mutate(data);
-    console.log(data);
   };
 
   return { form, onSubmit, mutation };

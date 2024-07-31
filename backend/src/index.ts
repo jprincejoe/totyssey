@@ -3,13 +3,14 @@ import express from "express";
 import cors from "cors";
 import connectToDb from "./config/db";
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
+import cloudinary from "./config/cloudinary";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
 import authRoutes from "./routes/auth.route";
-import { Route } from "./constants/routes";
 import authenticate from "./middleware/authenticate";
 import userRoutes from "./routes/user.route";
+import eventRoutes from "./routes/manageEvent.route";
 
 const app = express();
 
@@ -24,15 +25,16 @@ app.use(
 );
 app.use(cookieParser());
 
-app.get(Route.Health.BASE, (req, res) => {
+app.get("/health", (req, res) => {
   res.status(OK).send({ message: "healthy!" });
 });
 
 // routes
-app.use(Route.Auth.BASE, authRoutes);
+app.use("/auth", authRoutes);
 
 // protected routes
-app.use(Route.User.BASE, authenticate, userRoutes);
+app.use("/user", authenticate, userRoutes);
+app.use("/manage/events", authenticate, eventRoutes);
 
 // error handler
 app.use(errorHandler);

@@ -1,5 +1,5 @@
 import { Form } from "@/components/ui/form";
-import FormInput from "@/components/FormInput";
+import FormInput from "@/components/forms/FormInput";
 import { Button } from "@/components/ui/button";
 import { useRegister } from "../hooks/useRegister";
 import { Link } from "react-router-dom";

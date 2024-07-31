@@ -2,7 +2,6 @@ import { CookieOptions, Response } from "express";
 import TokenType from "../constants/tokens";
 import { NODE_ENV } from "../constants/env";
 import { fifteenMinutesFromNow, thirtyDaysFromNow } from "./date";
-import { Route } from "../constants/routes";
 import EnvironmentType from "../constants/environmentTypes";
 
 const defaultCookieOptions: CookieOptions = {
@@ -19,7 +18,6 @@ const accessTokenOptions = (): CookieOptions => ({
 const refreshTokenOptions = (): CookieOptions => ({
   ...defaultCookieOptions,
   expires: thirtyDaysFromNow(),
-  // path: Route.Auth.BASE + Route.Auth.REFRESH,
 });
 
 type Params = {
@@ -36,7 +34,5 @@ export const setAuthCookies = ({ res, accessToken, refreshToken }: Params) =>
 export const clearAuthCookies = (res: Response) => {
   return res
     .clearCookie(TokenType.ACCESS_TOKEN)
-    .clearCookie(TokenType.REFRESH_TOKEN, {
-      // path: Route.Auth.BASE + Route.Auth.REFRESH,
-    });
+    .clearCookie(TokenType.REFRESH_TOKEN, {});
 };

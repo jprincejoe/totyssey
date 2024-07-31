@@ -18,6 +18,9 @@ const ClientRoute = {
   User: {
     PROFILE: `/user-profile`,
   },
+  Event: {
+    CREATE: `/add-event`,
+  },
 };
 
 export { ClientRoute };

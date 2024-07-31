@@ -9,11 +9,15 @@ import {
   TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../constants/http";
-import { Route } from "../constants/routes";
 import VerificationCodeType from "../constants/verificationCodeTypes";
 import SessionModel from "../models/session.model";
 import UserModel, { UserDocument } from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
+import {
+  TCreateAccount,
+  TLoginUser,
+  TResetPassword,
+} from "../types/auth.types";
 import appAssert from "../utils/appAssert";
 import { hashValue } from "../utils/bcrypt";
 import {
@@ -34,17 +38,10 @@ import {
 import { sendMail } from "../utils/sendMail";
 import { buildForgotPasswordEmailRoute } from "../utils/url";
 
-export type CreateAccountParams = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
-
 //#endregion
 
 // Create account
-export const createAccount = async (data: CreateAccountParams) => {
+export const createAccount = async (data: TCreateAccount) => {
   // check if user already exists
   const existingUser = await UserModel.exists({
     email: data.email,
@@ -77,8 +74,7 @@ export const createAccount = async (data: CreateAccountParams) => {
   });
 
   // send verification email
-  const emailUrl =
-    APP_ORIGIN + Route.Auth.VERIFY_EMAIL + `/${verificationCode._id}`;
+  const emailUrl = `${APP_ORIGIN}/auth/email/verify/${verificationCode._id}`;
 
   const result = await sendMail({
     to: user.email,
@@ -109,14 +105,8 @@ export const createAccount = async (data: CreateAccountParams) => {
   };
 };
 
-// Login user params
-export type LoginUserParams = {
-  email: string;
-  password: string;
-};
-
 // login user
-export const loginUser = async (data: LoginUserParams) => {
+export const loginUser = async (data: TLoginUser) => {
   // get the user by email
   const user = await UserModel.findOne({ email: data.email });
 
@@ -262,10 +252,14 @@ export const verifyEmail = async (code: string) => {
 export const sendForgotPasswordEmail = async (email: string) => {
   // get the user by email
   const user = await UserModel.findOne({ email });
+
+  // Verify we have a user
   appAssert(user, NOT_FOUND, "User not found", AppErrorCode.RESOURCE_NOT_FOUND);
 
   // check the rate limit
   const fiveMinAgo = fiveMinutesAgo();
+
+  // create verification object
   const count = await VerificationCodeModel.countDocuments({
     userId: user._id,
     type: VerificationCodeType.PASSWORD_RESET,
@@ -282,6 +276,8 @@ export const sendForgotPasswordEmail = async (email: string) => {
 
   // create verification code
   const expiresAt = oneHourFromNow();
+
+  // create verification code object
   const verificationCode = await VerificationCodeModel.create({
     userId: user._id,
     type: VerificationCodeType.PASSWORD_RESET,
@@ -320,12 +316,6 @@ export const sendForgotPasswordEmail = async (email: string) => {
   };
 };
 
-// reset password params
-type ResetPasswordParams = {
-  password: string;
-  verificationCode: string;
-};
-
 // reset password response
 interface ResetPasswordResponse {
   user: Omit<UserDocument, "password">;
@@ -335,7 +325,7 @@ interface ResetPasswordResponse {
 export const resetPassword = async ({
   password,
   verificationCode,
-}: ResetPasswordParams): Promise<ResetPasswordResponse> => {
+}: TResetPassword): Promise<ResetPasswordResponse> => {
   // get the verification code
   const foundVerificationCode = await VerificationCodeModel.findOne({
     _id: verificationCode,
