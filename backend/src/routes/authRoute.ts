@@ -7,7 +7,7 @@ import {
   forgotPasswordHandler,
   verifyEmailHandler,
   resetPasswordHandler,
-} from "../controllers/auth.controllers";
+} from "../controllers/authController";
 import Params from "../constants/params";
 const authRoutes = Router();
 

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import TokenType from "../constants/tokens";
 import appAssert from "../utils/appAssert";
 import { UNAUTHORIZED } from "../constants/http";
@@ -6,7 +6,11 @@ import AppErrorCode from "../constants/appErrorCode";
 import { verifyAccessToken } from "../utils/jwt";
 import setUserRequestValues from "../utils/request";
 
-const authenticate: RequestHandler = (req, res, next) => {
+const authenticate: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // get access token from cookies
   const accessToken = req.cookies[TokenType.ACCESS_TOKEN] as string | undefined;
 

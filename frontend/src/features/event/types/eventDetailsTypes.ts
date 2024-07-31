@@ -13,7 +13,7 @@ export type TEventDetails = {
   occurence?: string;
 
   // Where
-  where?: string;
+  location?: string;
   addressLine1?: string;
   city?: string;
   state?: string;

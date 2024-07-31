@@ -10,14 +10,10 @@ import {
   UNAUTHORIZED,
 } from "../constants/http";
 import VerificationCodeType from "../constants/verificationCodeTypes";
-import SessionModel from "../models/session.model";
-import UserModel, { UserDocument } from "../models/user.model";
-import VerificationCodeModel from "../models/verificationCode.model";
-import {
-  TCreateAccount,
-  TLoginUser,
-  TResetPassword,
-} from "../types/auth.types";
+import SessionModel from "../models/sessionModel";
+import UserModel, { UserDocument } from "../models/userModel";
+import VerificationCodeModel from "../models/verificationCodeModel";
+import { TCreateAccount, TLoginUser, TResetPassword } from "../types/authType";
 import appAssert from "../utils/appAssert";
 import { hashValue } from "../utils/bcrypt";
 import {

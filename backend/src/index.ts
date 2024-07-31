@@ -1,16 +1,15 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import connectToDb from "./config/db";
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
-import cloudinary from "./config/cloudinary";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
-import authRoutes from "./routes/auth.route";
+import authRoutes from "./routes/authRoute";
 import authenticate from "./middleware/authenticate";
-import userRoutes from "./routes/user.route";
-import eventRoutes from "./routes/manageEvent.route";
+import userRoutes from "./routes/userRoute";
+import myEventsRoutes from "./routes/myEventsRoutes";
 
 const app = express();
 
@@ -25,7 +24,7 @@ app.use(
 );
 app.use(cookieParser());
 
-app.get("/health", (req, res) => {
+app.get("/health", (req: Request, res: Response) => {
   res.status(OK).send({ message: "healthy!" });
 });
 
@@ -34,7 +33,7 @@ app.use("/auth", authRoutes);
 
 // protected routes
 app.use("/user", authenticate, userRoutes);
-app.use("/manage/events", authenticate, eventRoutes);
+app.use("/my-events", authenticate, myEventsRoutes);
 
 // error handler
 app.use(errorHandler);
