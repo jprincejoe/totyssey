@@ -1,5 +1,4 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { ClientRoute } from "@/constants/clientRoutes";
 import { useVerifyEmail } from "@/features/auth/hooks/useVerifyEmail";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,14 +18,14 @@ const VerifyEmailPage = () => {
   // Error
   if (isError) {
     toast.error(error?.message);
-    navigate(ClientRoute.Root.BASE);
+    navigate("/");
     return <></>;
   }
 
   // Success
   if (isSuccess) {
     toast.success("Email verified!");
-    navigate(ClientRoute.Root.BASE);
+    navigate("");
     return <></>;
   }
 };

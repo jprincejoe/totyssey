@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { TLogin, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
-import { ClientRoute } from "@/constants/clientRoutes";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/stores/authStore";
 import { useLayoutEffect } from "react";
@@ -44,7 +43,7 @@ export const useLogin = () => {
   // On Error
   const onError = (error: Error) => {
     console.log(error.message);
-    navigate(ClientRoute.Auth.LOGIN);
+    navigate("/login");
     toast.error(error.message);
   };
 

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ClientRoute } from "@/constants/clientRoutes";
 import { useAuthStore } from "@/stores/authStore";
 import { Link } from "react-router-dom";
 
@@ -12,10 +11,10 @@ const MainNavAuth = () => {
 
   return (
     <div className="flex gap-4">
-      <Link to={ClientRoute.Event.CREATE}>
+      <Link to="/add-event">
         <Button className="font-bold">Create Event</Button>
       </Link>
-      <Link to={ClientRoute.User.PROFILE}>
+      <Link to="/user-profile">
         <Button variant="ghost" className="font-bold">
           Profile
         </Button>

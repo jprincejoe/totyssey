@@ -1,4 +1,3 @@
-import { ClientRoute } from "@/constants/clientRoutes";
 import Params from "@/constants/params";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,13 +24,13 @@ export const useVerifyEmail = () => {
   // Error
   if (isError) {
     toast.error(error?.message);
-    navigate(ClientRoute.Root.BASE);
+    navigate("/");
   }
 
   // Success
   if (isSuccess) {
     toast.success("Email verified!");
-    navigate(ClientRoute.Root.BASE);
+    navigate("/");
   }
 
   return { isPending, isError, isSuccess, error };

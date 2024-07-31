@@ -3,7 +3,6 @@ import FormInput from "@/components/forms/FormInput";
 import { Button } from "@/components/ui/button";
 import { useRegister } from "../hooks/useRegister";
 import { Link } from "react-router-dom";
-import { ClientRoute } from "@/constants/clientRoutes";
 
 const RegisterForm = () => {
   // Register Hook
@@ -67,7 +66,7 @@ const RegisterForm = () => {
         {/* Already have an account? */}
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
-          <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+          <Link to="/login" className="text-totysseyBlue">
             Sign in
           </Link>
         </div>

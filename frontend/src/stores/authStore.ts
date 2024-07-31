@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { TUser } from "@/features/auth/types/authTypes";
 import API from "@/config/apiClient";
-import { ServerRoute } from "@/constants/serverRoutes";
 
 interface AuthState {
   user: TUser | null;
@@ -19,7 +18,7 @@ export const useAuthStore = create<AuthState>()(
       set({ user: null });
 
       // call logout endpoint
-      await API.get(ServerRoute.Auth.LOGOUT);
+      await API.get("/api/v1/auth/logout");
     },
   }))
 );

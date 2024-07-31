@@ -2,7 +2,6 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ClientRoute } from "@/constants/clientRoutes";
 import { useForgotPassword } from "@/features/auth/hooks/useForgotPassword";
 
 const ForgotPasswordForm = () => {
@@ -36,11 +35,11 @@ const ForgotPasswordForm = () => {
         {/* Don't have an account? */}
         <div className="flex mt-4 text-center text-sm justify-center">
           Go back to&nbsp;
-          <Link to={ClientRoute.Auth.LOGIN} className="text-totysseyBlue">
+          <Link to={"/login"} className="text-totysseyBlue">
             Sign in
           </Link>
           &nbsp;<p>or</p>&nbsp;
-          <Link to={ClientRoute.Auth.REGISTER} className="text-totysseyBlue">
+          <Link to={"/register"} className="text-totysseyBlue">
             Sign up
           </Link>
         </div>

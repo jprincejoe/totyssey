@@ -70,7 +70,7 @@ export const createAccount = async (data: TCreateAccount) => {
   });
 
   // send verification email
-  const emailUrl = `${APP_ORIGIN}/auth/email/verify/${verificationCode._id}`;
+  const emailUrl = `${APP_ORIGIN}/api/v1/auth/email/verify/${verificationCode._id}`;
 
   const result = await sendMail({
     to: user.email,

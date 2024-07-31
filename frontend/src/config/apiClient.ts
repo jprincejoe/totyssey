@@ -6,10 +6,7 @@ declare module "axios" {
 import AppErrorCode from "@/constants/appErrorCode";
 import { TErrorResponse } from "@/types/apiError";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import queryClient from "./queryClient";
 import { navigate } from "@/lib/navigation";
-import { ClientRoute } from "@/constants/clientRoutes";
-import { ServerRoute } from "@/constants/serverRoutes";
 
 // Options
 const options = {
@@ -43,7 +40,7 @@ API.interceptors.response.use(
       ) {
         try {
           console.log("Trying to refresh token...");
-          await TokenRefreshClient.get(ServerRoute.Auth.REFRESH);
+          await TokenRefreshClient.get("/api/v1/auth/refresh");
           if (config !== undefined) {
             console.log("Successfully refreshed token!");
             return TokenRefreshClient(config);
@@ -52,7 +49,7 @@ API.interceptors.response.use(
           console.log("Unable to refresh token for client");
           // remove queries from cache
           // queryClient.clear();
-          navigate(ClientRoute.Root.BASE, {
+          navigate("/", {
             state: {
               redirectUrl: window.location.pathname,
             },

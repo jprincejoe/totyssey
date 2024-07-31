@@ -3,7 +3,6 @@ import Layout from "./layouts/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
-import { ClientRoute } from "./constants/clientRoutes";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
@@ -12,6 +11,7 @@ import { setNavigate } from "./lib/navigation";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import EventDetailsPage from "./pages/AddEventPage";
+import Params from "./constants/params";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
@@ -22,29 +22,23 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path={ClientRoute.User.PROFILE} element={<ProtectedRoute />}>
+        <Route path="/user-profile" element={<ProtectedRoute />}>
           <Route index element={<UserProfilePage />} />
         </Route>
 
-        <Route path={ClientRoute.Event.CREATE} element={<ProtectedRoute />}>
+        <Route path="/add-event" element={<ProtectedRoute />}>
           <Route index element={<EventDetailsPage />} />
         </Route>
-        <Route path={ClientRoute.Auth.REGISTER} element={<RegisterPage />} />
-        <Route path={ClientRoute.Auth.LOGIN} element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route
-          path={ClientRoute.Auth.VERIFY_EMAIL}
+          path={`/verify-email/:${Params.Email.CODE}`}
           element={<VerifyEmailPage />}
         />
-        <Route
-          path={ClientRoute.Auth.FORGOT_PASSWORD}
-          element={<ForgotPasswordPage />}
-        />
-        <Route
-          path={ClientRoute.Auth.RESET_PASSWORD}
-          element={<ResetPasswordPage />}
-        />
-        <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
-        <Route path="*" element={<Navigate to={ClientRoute.Root.BASE} />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="*" element={<Navigate to={"/"} />} />
       </Route>
     </Routes>
   );

@@ -29,11 +29,11 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 // routes
-app.use("/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 // protected routes
-app.use("/user", authenticate, userRoutes);
-app.use("/my-events", authenticate, myEventsRoutes);
+app.use("/api/v1/user", authenticate, userRoutes);
+app.use("/api/v1/my-events", authenticate, myEventsRoutes);
 
 // error handler
 app.use(errorHandler);

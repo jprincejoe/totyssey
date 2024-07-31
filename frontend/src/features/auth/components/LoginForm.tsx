@@ -2,7 +2,6 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/forms/FormInput";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ClientRoute } from "@/constants/clientRoutes";
 import { useLogin } from "../hooks/useLogin";
 
 const LoginForm = () => {
@@ -35,10 +34,7 @@ const LoginForm = () => {
         </div>
 
         {/* Forgot Password */}
-        <Link
-          to={ClientRoute.Auth.FORGOT_PASSWORD}
-          className="ml-auto inline-block text-sm"
-        >
+        <Link to="/forgot-password" className="ml-auto inline-block text-sm">
           <p className="text-totysseyBlue">Forgot password?</p>
         </Link>
 
@@ -50,7 +46,7 @@ const LoginForm = () => {
         {/* Don't have an account? */}
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <Link to={ClientRoute.Auth.REGISTER} className="text-totysseyBlue">
+          <Link to="/register" className="text-totysseyBlue">
             Sign up
           </Link>
         </div>

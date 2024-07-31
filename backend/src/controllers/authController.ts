@@ -112,6 +112,8 @@ export const refreshHandler = catchErrors(
 
 export const verifyEmailHandler = catchErrors(
   async (req: Request, res: Response) => {
+    console.log("in verifyEmailHandler");
+
     // get verification code
     const code = verificationCodeSchema.parse(req.params[Params.Email.CODE]);
 
