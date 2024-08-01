@@ -6,8 +6,7 @@ import { TLogin, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
 import { toast } from "react-toastify";
-import { useAuthStore } from "@/stores/authStore";
-import { useLayoutEffect } from "react";
+import { useAuth } from "@/contexts/authContext";
 
 // Default Values
 const defaultValues: TLogin = {
@@ -18,7 +17,8 @@ const defaultValues: TLogin = {
 export const useLogin = () => {
   // Navigation
   const navigate = useNavigate();
-  const { user, setUser } = useAuthStore();
+
+  const auth = useAuth();
 
   // Form
   const form = useForm<TLogin>({
@@ -26,24 +26,17 @@ export const useLogin = () => {
     defaultValues,
   });
 
-  // Log user state whenever it changes
-  useLayoutEffect(() => {
-    if (user) {
-      navigate("/", {
-        replace: true,
-      });
-    }
-  }, [user]);
-
   // On Success
   const onSuccess = (data: TUser) => {
-    setUser(data);
+    // setUser(data);
+    auth.login(data);
+    navigate("/");
   };
 
   // On Error
   const onError = (error: Error) => {
     console.log(error.message);
-    navigate("/login");
+    // navigate("/login");
     toast.error(error.message);
   };
 

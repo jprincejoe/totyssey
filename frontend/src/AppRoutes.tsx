@@ -9,26 +9,38 @@ import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import { setNavigate } from "./lib/navigation";
 import UserProfilePage from "./pages/UserProfilePage";
-import ProtectedRoute from "./components/ProtectedRoute";
 import EventDetailsPage from "./pages/AddEventPage";
 import Params from "./constants/params";
+import ProtectedRoute from "./layouts/components/ProtectedRoute";
+import LoadingSpinner from "./components/LoadingSpinner";
+import { useAuth } from "./contexts/authContext";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
   const navigate = useNavigate();
   setNavigate(navigate);
 
+  const auth = useAuth();
+
+  if (auth.loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="/user-profile" element={<ProtectedRoute />}>
-          <Route index element={<UserProfilePage />} />
-        </Route>
+        <Route
+          path="/user-profile"
+          element={
+            <ProtectedRoute>
+              <UserProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/add-event" element={<ProtectedRoute />}>
-          <Route index element={<EventDetailsPage />} />
-        </Route>
+        <Route path="/add-event" element={<EventDetailsPage />} />
+
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route

@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuth } from "@/contexts/authContext";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 import { Link } from "react-router-dom";
 
 const MainNavAuth = () => {
-  const { clearUser } = useAuthStore();
+  const auth = useAuth();
+  const { mutation } = useLogout();
 
   const handleLogout = () => {
-    clearUser();
+    console.log("In handleLogout of MainNavAuth");
+    mutation.mutate();
   };
 
   return (
@@ -16,7 +19,7 @@ const MainNavAuth = () => {
       </Link>
       <Link to="/user-profile">
         <Button variant="ghost" className="font-bold">
-          Profile
+          {`Profile ${auth?.user?.firstName}`}
         </Button>
       </Link>
       <Button onClick={handleLogout} variant="ghost" className="font-bold">

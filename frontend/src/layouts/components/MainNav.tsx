@@ -1,11 +1,11 @@
-import { useAuthStore } from "@/stores/authStore";
+import { useAuth } from "@/contexts/authContext";
 import MainNavAuth from "./MainNavAuth";
 import MainNavVisitor from "./MainNavVisitor";
 
 const MainNav = () => {
-  const { user } = useAuthStore();
+  const auth = useAuth();
 
-  return user ? <MainNavAuth /> : <MainNavVisitor />;
+  return auth.user ? <MainNavAuth /> : <MainNavVisitor />;
 };
 
 export default MainNav;

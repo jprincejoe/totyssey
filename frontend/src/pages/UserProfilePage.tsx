@@ -1,13 +1,13 @@
-import { useAuthStore } from "@/stores/authStore";
+import { useAuth } from "@/contexts/authContext";
 
 const UserProfilePage = () => {
-  const { user } = useAuthStore();
+  const auth = useAuth();
 
   return (
     <div className="container flex flex-col">
-      <div className="text-2xl font-bold">Hello {user?.firstName}</div>
+      <div className="text-2xl font-bold">Hello {auth?.user?.firstName}</div>
       <div>ID: </div>
-      <div className="">{user?._id}</div>
+      <div className="">{auth?.user?._id}</div>
     </div>
   );
 };

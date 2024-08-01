@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { TRegister, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
-import { useAuthStore } from "@/stores/authStore";
 import { useLayoutEffect } from "react";
 
 // Default Values
@@ -21,7 +20,6 @@ const defaultValues: TRegister = {
 export const useRegister = () => {
   // Navigation
   const navigate = useNavigate();
-  const { user, setUser } = useAuthStore();
 
   // Form
   const form = useForm<TRegister>({
@@ -29,19 +27,19 @@ export const useRegister = () => {
     defaultValues,
   });
 
-  // Log user state whenever it changes
-  useLayoutEffect(() => {
-    if (user) {
-      navigate("/", {
-        replace: true,
-      });
-    }
-  }, [user]);
+  // // Log user state whenever it changes
+  // useLayoutEffect(() => {
+  //   if (user) {
+  //     navigate("/", {
+  //       replace: true,
+  //     });
+  //   }
+  // }, [user]);
 
   // On Success
   const onSuccess = (data: TUser) => {
     toast.success("Account created!");
-    setUser(data);
+    // setUser(data);
   };
 
   // On Error

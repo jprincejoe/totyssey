@@ -8,18 +8,18 @@ import queryClient from "./config/queryClient.ts";
 import AppRoutes from "./AppRoutes.tsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import GetUserWrapper from "./GetUserWrapper.tsx";
+import { AuthProvider } from "./contexts/authContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <GetUserWrapper>
-        <Router>
+      <Router>
+        <AuthProvider>
           <AppRoutes />
           <ToastContainer />
           <ReactQueryDevtools position="bottom" initialIsOpen={false} />
-        </Router>
-      </GetUserWrapper>
+        </AuthProvider>
+      </Router>
     </QueryClientProvider>
   </React.StrictMode>
 );

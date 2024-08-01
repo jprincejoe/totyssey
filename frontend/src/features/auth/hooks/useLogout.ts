@@ -2,13 +2,17 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { authApi } from "../api/authApi";
+import { useAuth } from "@/contexts/authContext";
 
 export const useLogout = () => {
   // Navigation
   const navigate = useNavigate();
+  const auth = useAuth();
 
   // On Success
   const onSuccess = () => {
+    console.log("In onSuccess of useLogout...");
+    auth.logout();
     navigate("/", {
       replace: true,
     });
