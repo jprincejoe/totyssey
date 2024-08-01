@@ -26,15 +26,12 @@ const EventCategoriesSection = () => {
   const { control } = useFormContext<TEvent>();
 
   return (
-    <EventFormSection
-      title="Event Details"
-      description="Enter details for the event"
-    >
-      {categories.map(({ name, label }) => {
-        return <FormCheckbox control={control} name={name} label={label} />;
-      })}
-
-      {/* Title */}
+    <EventFormSection title="Categories" description="Select all that apply">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 exlg:grid-cols-4 gap-4">
+        {categories.map(({ name, label }) => {
+          return <FormCheckbox control={control} name={name} label={label} />;
+        })}
+      </div>
     </EventFormSection>
   );
 };

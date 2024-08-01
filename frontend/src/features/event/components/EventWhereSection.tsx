@@ -24,7 +24,7 @@ const EventWhereSection = () => {
           control={control}
           name="city"
           label="City"
-          className="flex-1"
+          className="flex-1 w-full"
         />
 
         {/* State */}
@@ -32,7 +32,7 @@ const EventWhereSection = () => {
           control={control}
           name="state"
           label="State"
-          className="flex-1"
+          className="flex-1 w-full"
         />
 
         {/* Zip */}
@@ -40,7 +40,7 @@ const EventWhereSection = () => {
           control={control}
           name="zip"
           label="Zip"
-          className="flex-1"
+          className="flex-1 w-full"
         />
       </div>
     </EventFormSection>

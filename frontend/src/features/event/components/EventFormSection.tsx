@@ -20,16 +20,14 @@ const EventFormSection = ({
   children,
 }: TEventFormSection) => {
   return (
-    <div className="container flex flex-col justify-center">
-      <Card className="w-full border-none shadow-none">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </CardHeader>
-        <CardContent className="flex flex-col space-y-4">
-          {children}
-        </CardContent>
-      </Card>
+    <div className="container flex flex-col justify-center px-0">
+      {/* <Card className="w-full border-none shadow-none"> */}
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      <CardContent className="flex flex-col space-y-4">{children}</CardContent>
+      {/* </Card> */}
       <Separator className="mt-6 w-[98%] mx-auto" />
     </div>
   );

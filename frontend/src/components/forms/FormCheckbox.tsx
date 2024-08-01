@@ -28,7 +28,7 @@ const FormCheckbox: React.FC<CustomFormFieldProps> = ({
     <FormItem className={clsx("custom-form-item", className)}>
       <FormControl>
         <div className="flex items-center space-x-2">
-          <Checkbox {...field} />
+          <Checkbox {...field} id={name} />
           <label
             htmlFor={name}
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

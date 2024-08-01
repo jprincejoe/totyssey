@@ -11,12 +11,6 @@ const EventWhenSection = () => {
       title="Where"
       description="Enter details for the location of the event"
     >
-      {/* Location */}
-      <FormInput control={control} name="location" label="Location" />
-
-      {/* Address Line 1 */}
-      <FormInput control={control} name="addressLine1" label="Address Line 1" />
-
       {/* Start Date & Time */}
       <div className="flex flex-col gap-4 items-center md:flex-row">
         {/* Start Date */}
@@ -25,7 +19,7 @@ const EventWhenSection = () => {
           name="startDate"
           label="Start Date"
           type="date"
-          className="flex-1"
+          className="flex-1 w-full"
         />
 
         {/* Start Time */}
@@ -34,7 +28,7 @@ const EventWhenSection = () => {
           name="startTime"
           label="Start Time"
           type="time"
-          className="flex-1"
+          className="flex-1 w-full"
         />
       </div>
 
@@ -46,7 +40,7 @@ const EventWhenSection = () => {
           name="endDate"
           label="End Date"
           type="date"
-          className="flex-1"
+          className="flex-1 w-full"
         />
 
         {/* End Time */}
@@ -55,7 +49,7 @@ const EventWhenSection = () => {
           name="endTime"
           label="End Time"
           type="time"
-          className="flex-1"
+          className="flex-1 w-full"
         />
       </div>
 
