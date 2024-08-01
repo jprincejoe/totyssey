@@ -6,7 +6,10 @@ export const eventSchema = z.object({
     .string()
     .min(1, { message: "Title is required" })
     .max(255, { message: "Title must be at most 255 characters" }),
-  description: z.string().min(1, { message: "Description is required" }),
+  description: z
+    .string()
+    .min(1, { message: "Description is required" })
+    .max(2048, { message: "Description must be at most 2048 characters" }),
   eventLink: z.string().optional(),
   isFree: z.boolean().default(false),
 
@@ -18,7 +21,7 @@ export const eventSchema = z.object({
   occurrence: z.string().optional(),
 
   // Where
-  where: z.string().optional(),
+  location: z.string().optional(),
   addressLine1: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
@@ -31,7 +34,7 @@ export const eventSchema = z.object({
   ages: z.array(z.string()).optional(),
 
   // Images
-  images: z.array(z.instanceof(File)).optional(),
+  imageFiles: z.instanceof(FileList).optional(),
 });
 
 export type TEventDetails = z.infer<typeof eventSchema>;

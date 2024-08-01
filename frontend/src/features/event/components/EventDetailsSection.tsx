@@ -1,15 +1,18 @@
 import FormInput from "@/components/forms/FormInput";
 import { useFormContext } from "react-hook-form";
-import { TEventDetails } from "../types/eventDetailsTypes";
 import FormTextarea from "@/components/forms/FormTextarea";
 import FormCheckbox from "@/components/forms/FormCheckbox";
+import { TEvent } from "../types/eventType";
+import EventFormSection from "./EventFormSection";
 
 const EventDetailsSection = () => {
-  const { control } = useFormContext<TEventDetails>();
+  const { control } = useFormContext<TEvent>();
 
   return (
-    <div className="flex-flex-col space-y-4">
-      <h1 className="text-3xl font-bold mb-3">Create Event</h1>
+    <EventFormSection
+      title="Event Details"
+      description="Enter details for the event"
+    >
       {/* Title */}
       <FormInput control={control} name="title" label="Title" />
 
@@ -21,20 +24,7 @@ const EventDetailsSection = () => {
 
       {/* Is Free */}
       <FormCheckbox control={control} name="isFree" label="Free to attend" />
-
-      <FormInput
-        control={control}
-        name="startDate"
-        label="Start Date"
-        type="date"
-      />
-      <FormInput
-        control={control}
-        name="startTime"
-        label="Start Time"
-        type="time"
-      />
-    </div>
+    </EventFormSection>
   );
 };
 
