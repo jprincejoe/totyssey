@@ -1,27 +1,30 @@
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import EventDetailsSection from "./EventDetailsSection";
-import { TEvent } from "../types/eventType";
 import EventWhereSection from "./EventWhereSection";
 import EventWhenSection from "./EventWhenSection";
 import EventCategoriesSection from "./EventCategoriesSection";
 import EventAgesSection from "./EventAgesSection";
 import EventImagesSection from "./EventImagesSection";
 import { Button } from "@/components/ui/button";
+import { useCreateEvent } from "../hooks/useCreateEvent";
 
 const ManageEventForm = () => {
-  const formMethods = useForm<TEvent>();
+  const { form, onSubmit, mutation } = useCreateEvent();
 
   return (
-    <FormProvider {...formMethods}>
-      <form>
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <EventDetailsSection />
         <EventWhereSection />
         <EventWhenSection />
         <EventCategoriesSection />
         <EventAgesSection />
         <EventImagesSection />
+        {/* Submit Button */}
         <div className="flex justify-end mx-6 mt-8">
-          <Button type="submit">Create Event</Button>
+          <Button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? "Creating Event..." : "Create Event"}
+          </Button>
         </div>
       </form>
     </FormProvider>

@@ -15,6 +15,7 @@ interface CustomFormFieldProps {
   placeholder?: string;
   type?: string;
   className?: string;
+  [key: string]: any;
 }
 
 const FormInput: React.FC<CustomFormFieldProps> = ({
@@ -24,6 +25,7 @@ const FormInput: React.FC<CustomFormFieldProps> = ({
   placeholder = "",
   type = "text",
   className = "",
+  ...rest
 }) => {
   const {
     field,
@@ -37,7 +39,7 @@ const FormInput: React.FC<CustomFormFieldProps> = ({
     <FormItem className={clsx("custom-form-item", className)}>
       <FormLabel>{label}</FormLabel>
       <FormControl>
-        <Input {...field} type={type} placeholder={placeholder} />
+        <Input {...field} type={type} placeholder={placeholder} {...rest} />
       </FormControl>
       {error && <FormMessage>{error.message}</FormMessage>}
     </FormItem>

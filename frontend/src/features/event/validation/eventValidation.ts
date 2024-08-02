@@ -1,5 +1,91 @@
 import z from "zod";
 
+const datetimeSchema = z
+  .string()
+  .optional()
+  .refine(
+    (value) => {
+      if (value === undefined || value === "") return true;
+      return !isNaN(Date.parse(value));
+    },
+    {
+      message: "Invalid datetime format",
+    }
+  );
+
+// const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+// // Define the schema for a single file
+// const imageFileSchema = z
+//   .instanceof(File)
+//   .refine(
+//     (file) => {
+//       console.log(file);
+//       // Check that the file type is an image
+//       return file.type.startsWith("image/");
+//     },
+//     {
+//       message: "File must be an image",
+//     }
+//   )
+//   .refine(
+//     (file) => {
+//       // Check that the file size is less than or equal to 5MB (for example)
+//       return file.size <= 5 * 1024 * 1024;
+//     },
+//     {
+//       message: "File size must be less than or equal to 5MB",
+//     }
+//   );
+
+// const imageFileSchema1 = z.custom<File>(
+//   (file) => {
+//     console.log(file);
+//     // Perform any additional validation on the file here
+//     return file instanceof File && file.type.startsWith("image/");
+//   },
+//   {
+//     message: "Invalid file type. Only image files are allowed.",
+//   }
+// );
+
+// Schema to validate a single image file
+const imageFileSchema = z.custom<File>(
+  (file) => {
+    return file instanceof File && file.type.startsWith("image/");
+  },
+  {
+    message: "Invalid file type. Only image files are allowed.",
+  }
+);
+
+// Schema to validate multiple image files (FileList)
+const imageFilesSchema = z.custom<FileList | null | undefined>(
+  (files) => {
+    if (files == null) {
+      return true; // Allow null or undefined
+    }
+
+    if (!(files instanceof FileList)) {
+      return false;
+    }
+
+    const fileArray = Array.from(files);
+
+    // Check the number of files
+    if (fileArray.length > 6) {
+      return false;
+    }
+
+    // Validate each file
+    return fileArray.every((file) => imageFileSchema.safeParse(file).success);
+  },
+  {
+    message: "Invalid file selection. Please upload up to 6 image files.",
+  }
+);
+
 export const eventSchema = z.object({
   // Details
   title: z
@@ -14,10 +100,8 @@ export const eventSchema = z.object({
   isFree: z.boolean().default(false),
 
   // When
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  startTime: z.date().optional(),
-  endTime: z.date().optional(),
+  startDate: datetimeSchema.optional(),
+  endDate: datetimeSchema.optional(),
   occurrence: z.string().optional(),
 
   // Where
@@ -33,8 +117,17 @@ export const eventSchema = z.object({
   // Ages
   ages: z.array(z.string()).optional(),
 
-  // Images
-  imageFiles: z.instanceof(FileList).optional(),
-});
+  imageFiles: imageFilesSchema.optional(),
 
-export type TEventDetails = z.infer<typeof eventSchema>;
+  // // Images
+  // imageFiles: z
+  //   .any()
+  //   .refine(
+  //     (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+  //     `Max file size is 5MB.`
+  //   )
+  //   .refine(
+  //     (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+  //     ".jpg, .jpeg, and .png files are accepted."
+  //   ),
+});

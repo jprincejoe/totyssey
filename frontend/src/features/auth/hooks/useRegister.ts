@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { TRegister, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
-import { useLayoutEffect } from "react";
+import { useAuth } from "@/contexts/authContext";
 
 // Default Values
 const defaultValues: TRegister = {
@@ -21,25 +21,19 @@ export const useRegister = () => {
   // Navigation
   const navigate = useNavigate();
 
+  const auth = useAuth();
+
   // Form
   const form = useForm<TRegister>({
     resolver: zodResolver(authSchema.Register),
     defaultValues,
   });
 
-  // // Log user state whenever it changes
-  // useLayoutEffect(() => {
-  //   if (user) {
-  //     navigate("/", {
-  //       replace: true,
-  //     });
-  //   }
-  // }, [user]);
-
   // On Success
   const onSuccess = (data: TUser) => {
     toast.success("Account created!");
-    // setUser(data);
+    auth.login(data);
+    navigate("/");
   };
 
   // On Error

@@ -23,7 +23,9 @@ const AppRoutes = () => {
   const auth = useAuth();
 
   if (auth.loading) {
-    return <LoadingSpinner />;
+    return (
+      <LoadingSpinner className="w-full h-screen flex justify-center items-center" />
+    );
   }
 
   return (

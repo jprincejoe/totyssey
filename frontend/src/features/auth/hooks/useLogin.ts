@@ -28,7 +28,6 @@ export const useLogin = () => {
 
   // On Success
   const onSuccess = (data: TUser) => {
-    // setUser(data);
     auth.login(data);
     navigate("/");
   };
@@ -36,7 +35,7 @@ export const useLogin = () => {
   // On Error
   const onError = (error: Error) => {
     console.log(error.message);
-    // navigate("/login");
+    navigate("/login");
     toast.error(error.message);
   };
 

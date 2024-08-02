@@ -10,8 +10,6 @@ export interface EventDocument extends mongoose.Document {
   isFree: boolean;
   startDate?: Date;
   endDate?: Date;
-  startTime?: Date;
-  endTime?: Date;
   occurence?: string;
   location?: string;
   addressLine1?: string;
@@ -57,12 +55,6 @@ const eventSchema = new mongoose.Schema<EventDocument>(
       type: Date,
     },
     endDate: {
-      type: Date,
-    },
-    startTime: {
-      type: Date,
-    },
-    endTime: {
       type: Date,
     },
     occurence: {
