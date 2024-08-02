@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoute";
 import authenticate from "./middleware/authenticate";
 import userRoutes from "./routes/userRoute";
 import myEventsRoutes from "./routes/myEventsRoutes";
+import configCloudinary from "./config/cloudinary";
 
 const app = express();
 
@@ -41,4 +42,5 @@ app.use(errorHandler);
 app.listen(PORT, async () => {
   console.log(`App is listening on port ${PORT} in ${NODE_ENV} environment.`);
   await connectToDb();
+  configCloudinary;
 });

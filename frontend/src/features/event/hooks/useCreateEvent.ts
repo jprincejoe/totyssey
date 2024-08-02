@@ -5,7 +5,8 @@ import { toast } from "react-toastify";
 import { TEvent } from "../types/eventType";
 import { eventSchema } from "../validation/eventValidation";
 import { eventApi } from "../api/eventApi";
-import { formatISO } from "date-fns";
+import { convertEventObjectToFormData } from "../utils/convertEventObjectToFormData";
+import { convertToISODateString } from "@/utils/dateUtils";
 
 // Default Values
 const defaultValues: TEvent = {
@@ -55,25 +56,15 @@ export const useCreateEvent = () => {
   // Submit Handler
   const onSubmit = async (data: TEvent) => {
     console.log(data);
-    // convert dates to ISO format before sending to backend
 
-    let startDateIsoString: string | null = null;
-    if (data.startDate) {
-      console.log(data.startDate);
-      startDateIsoString = formatISO(new Date(data.startDate));
-      console.log(startDateIsoString);
-      data.startDate = startDateIsoString;
-    }
-
-    let endDateIsoString: string | null = null;
-    if (data.endDate) {
-      endDateIsoString = formatISO(new Date(data.endDate));
-      data.endDate = endDateIsoString;
-    }
-
+    data.startDate = convertToISODateString(data.startDate);
+    data.endDate = convertToISODateString(data.endDate);
     console.log(data);
 
-    mutation.mutate(data);
+    // Needs to be in FormData format for images
+    const formData = convertEventObjectToFormData(data);
+
+    mutation.mutate(formData);
   };
 
   return { form, onSubmit, mutation };

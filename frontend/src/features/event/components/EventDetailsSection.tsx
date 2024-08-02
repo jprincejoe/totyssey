@@ -23,7 +23,7 @@ const EventDetailsSection = () => {
       <FormInput control={control} name="eventLink" label="Event Link" />
 
       {/* Is Free */}
-      <FormCheckbox control={control} name="isFree" label="Free to attend" />
+      <FormCheckbox control={control} name="isFree" value="Free to attend" />
     </EventFormSection>
   );
 };

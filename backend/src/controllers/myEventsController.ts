@@ -11,6 +11,12 @@ import { parseISO } from "date-fns";
 export const createEventHandler = catchErrors(
   async (req: Request, res: Response) => {
     console.log("In createEventHandler...");
+
+    // Convert 'isFree' from string to boolean
+    if (typeof req.body.isFree === "string") {
+      req.body.isFree = req.body.isFree === "true";
+    }
+
     // Get images from Multer middleware
     const imageFiles = req.files as Express.Multer.File[];
 

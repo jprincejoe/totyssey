@@ -7,7 +7,6 @@ interface CustomFormFieldProps {
   control: Control<any>;
   name: string;
   value: string;
-  label: string;
   className?: string;
   group?: boolean;
   [key: string]: any;
@@ -17,7 +16,6 @@ const FormCheckbox: React.FC<CustomFormFieldProps> = ({
   control,
   name,
   value,
-  label,
   className = "",
   group = false,
 }) => {
@@ -51,15 +49,16 @@ const FormCheckbox: React.FC<CustomFormFieldProps> = ({
         <div className="flex items-center space-x-2">
           <Checkbox
             {...field}
+            id={value}
             key={group ? value : name}
             checked={isChecked}
             onCheckedChange={handleChange}
           />
           <label
-            htmlFor={name}
+            htmlFor={value}
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            {label}
+            {value}
           </label>
         </div>
       </FormControl>
