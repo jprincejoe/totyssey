@@ -6,11 +6,12 @@ import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/errorHandler";
 import { OK } from "./constants/http";
-import authRoutes from "./routes/authRoute";
+import authRoutes from "./routes/authRoutes";
 import authenticate from "./middleware/authenticate";
-import userRoutes from "./routes/userRoute";
+import userRoutes from "./routes/userRoutes";
 import myEventsRoutes from "./routes/myEventsRoutes";
 import configCloudinary from "./config/cloudinary";
+import eventRoutes from "./routes/eventRoutes";
 
 const app = express();
 
@@ -29,8 +30,9 @@ app.get("/health", (req: Request, res: Response) => {
   res.status(OK).send({ message: "healthy!" });
 });
 
-// routes
+// unprotected routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/events", eventRoutes);
 
 // protected routes
 app.use("/api/v1/user", authenticate, userRoutes);

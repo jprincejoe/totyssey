@@ -1,27 +1,7 @@
 import mongoose from "mongoose";
+import { Event } from "../types/events";
 
-// Document Interface
-export interface EventDocument extends mongoose.Document {
-  _id: mongoose.Types.ObjectId;
-  userId: mongoose.Types.ObjectId;
-  title: string;
-  description: string;
-  eventLink?: string;
-  isFree: boolean;
-  startDate?: Date;
-  endDate?: Date;
-  occurence?: string;
-  location?: string;
-  addressLine1?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  categories?: string[];
-  ages?: string[];
-  imageUrls?: string[];
-}
-
-const eventSchema = new mongoose.Schema<EventDocument>(
+const eventSchema = new mongoose.Schema<Event>(
   {
     userId: {
       ref: "User",
@@ -93,6 +73,6 @@ const eventSchema = new mongoose.Schema<EventDocument>(
   { timestamps: true }
 );
 
-const EventModel = mongoose.model<EventDocument>("Event", eventSchema);
+const EventModel = mongoose.model<Event>("Event", eventSchema);
 
 export default EventModel;
