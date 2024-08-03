@@ -11,7 +11,6 @@ export const useLogout = () => {
 
   // On Success
   const onSuccess = () => {
-    console.log("In onSuccess of useLogout...");
     auth.logout();
     navigate("/", {
       replace: true,

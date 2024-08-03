@@ -1,4 +1,3 @@
-import { FA } from "@/enums/Icons";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -9,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Icon from "@/components/Icon";
+import { FA } from "@/constants/Icons";
 
 const MobileNav = () => {
   return (
