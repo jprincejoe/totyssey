@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/authContext";
+import { useAuth } from "@/contexts/AuthContext";
 import MainNavAuth from "./MainNavAuth";
 import MainNavVisitor from "./MainNavVisitor";
 

@@ -13,7 +13,7 @@ import EventDetailsPage from "./pages/AddEventPage";
 import Params from "./constants/params";
 import ProtectedRoute from "./layouts/components/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
-import { useAuth } from "./contexts/authContext";
+import { useAuth } from "./contexts/AuthContext";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
