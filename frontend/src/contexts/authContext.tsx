@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { TUser } from "@/features/auth/types/authTypes";
 import { useGetUser } from "@/features/user/hooks/useGetUser";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type TAuthContext = {
   user: TUser | null;
@@ -12,6 +13,7 @@ type TAuthContext = {
 const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  console.log("In AuthProvider");
   const [user, setUser] = useState<TUser | null>(null);
   const { data, isLoading } = useGetUser();
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     logout,
     loading,
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -14,6 +14,7 @@ import Params from "./constants/params";
 import ProtectedRoute from "./layouts/components/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { useAuth } from "./contexts/AuthContext";
+import SearchPage from "./pages/SearchPage";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
@@ -32,6 +33,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route
           path="/user-profile"
           element={
@@ -41,16 +43,34 @@ const AppRoutes = () => {
           }
         />
 
-        <Route path="/add-event" element={<EventDetailsPage />} />
+        <Route
+          path="/add-event"
+          element={
+            <ProtectedRoute>
+              <EventDetailsPage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route
           path={`/verify-email/:${Params.Email.CODE}`}
-          element={<VerifyEmailPage />}
+          element={
+            <ProtectedRoute>
+              <VerifyEmailPage />
+            </ProtectedRoute>
+          }
         />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route
+          path="/reset-password"
+          element={
+            <ProtectedRoute>
+              <ResetPasswordPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="*" element={<Navigate to={"/"} />} />
       </Route>

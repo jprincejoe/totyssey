@@ -1,39 +1,37 @@
 import { createContext, useContext, useState } from "react";
 
-type EventSearchContext = {
+type SearchContext = {
   location: string;
   freeToAttend: boolean;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | null;
+  endDate: Date | null;
   eventId?: string;
   saveSearchValues: (
     location: string,
     freeToAttend: boolean,
-    startDate: Date,
-    endDate: Date
+    startDate: Date | null,
+    endDate: Date | null
   ) => void;
 };
 
-const EventSearchContext = createContext<EventSearchContext | undefined>(
-  undefined
-);
+const SearchContext = createContext<SearchContext | undefined>(undefined);
 
-export const EventSearchContextProvider = ({
+export const SearchContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const [location, setLocation] = useState<string>("");
   const [freeToAttend, setFreeToAttend] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [eventId, setEventId] = useState<string>("");
 
   const saveSearchValues = (
     location: string,
     freeToAttend: boolean,
-    startDate: Date,
-    endDate: Date,
+    startDate: Date | null,
+    endDate: Date | null,
     eventId?: string
   ) => {
     setLocation(location);
@@ -46,7 +44,7 @@ export const EventSearchContextProvider = ({
   };
 
   return (
-    <EventSearchContext.Provider
+    <SearchContext.Provider
       value={{
         location,
         freeToAttend,
@@ -57,18 +55,16 @@ export const EventSearchContextProvider = ({
       }}
     >
       {children}
-    </EventSearchContext.Provider>
+    </SearchContext.Provider>
   );
 };
 
-export const useEventSearchContext = () => {
-  const context = useContext(EventSearchContext);
+export const useSearchContext = () => {
+  const context = useContext(SearchContext);
 
   if (context === undefined) {
-    throw new Error(
-      "useEventSearchContext must be used with EventSearchProvider"
-    );
+    throw new Error("useSearchContext must be used with SearchProvider");
   }
 
-  return context as EventSearchContext;
+  return context as SearchContext;
 };
