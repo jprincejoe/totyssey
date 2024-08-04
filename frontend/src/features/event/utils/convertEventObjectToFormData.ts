@@ -1,6 +1,6 @@
-import { TEvent } from "../types/eventType";
+import { Event } from "../types/eventType";
 
-export const convertEventObjectToFormData = (data: TEvent): FormData => {
+export const convertEventObjectToFormData = (data: Event): FormData => {
   const formData = new FormData();
 
   formData.append("title", data.title);

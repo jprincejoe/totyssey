@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { TEvent } from "../types/eventType";
+import { Event } from "../types/eventType";
 import EventFormSection from "./EventFormSection";
 import FormFileInput from "@/components/forms/FormFileInput";
 
 const EventImagesSection = () => {
-  const { control } = useFormContext<TEvent>();
+  const { control } = useFormContext<Event>();
 
   return (
     <EventFormSection

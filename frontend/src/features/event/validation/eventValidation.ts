@@ -87,7 +87,7 @@ const imageFilesSchema = z.custom<FileList | null | undefined>(
 );
 
 export const eventSchema = z.object({
-  // Details
+  _id: z.string().optional(),
   title: z
     .string()
     .min(1, { message: "Title is required" })
@@ -118,6 +118,7 @@ export const eventSchema = z.object({
   ages: z.array(z.string()).optional(),
 
   imageFiles: imageFilesSchema.optional(),
+  imageUrls: z.array(z.string()).optional(),
 
   // // Images
   // imageFiles: z

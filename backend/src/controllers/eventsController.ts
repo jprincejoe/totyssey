@@ -13,7 +13,7 @@ export const getEventsHandler = catchErrors(
     const total = await EventModel.countDocuments();
 
     // pagination values
-    const pageSize = 5;
+    const pageSize = 50;
     const page = parseInt(req.query.page ? req.query.page.toString() : "1");
     const skip = (page - 1) * pageSize;
 

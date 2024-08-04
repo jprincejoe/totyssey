@@ -2,14 +2,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { TEvent } from "../types/eventType";
+import { Event } from "../types/eventType";
 import { eventSchema } from "../validation/eventValidation";
 import { eventApi } from "../api/eventApi";
 import { convertEventObjectToFormData } from "../utils/convertEventObjectToFormData";
 import { convertToISODateString } from "@/utils/dateUtils";
+import { useNavigate } from "react-router-dom";
 
 // Default Values
-const defaultValues: TEvent = {
+const defaultValues: Event = {
   title: "",
   description: "",
   eventLink: "",
@@ -28,15 +29,18 @@ const defaultValues: TEvent = {
 };
 
 export const useCreateEvent = () => {
+  const navigate = useNavigate();
+
   // Form
-  const form = useForm<TEvent>({
+  const form = useForm<Event>({
     resolver: zodResolver(eventSchema),
     defaultValues,
   });
 
   // On Success
-  const onSuccess = (data: TEvent) => {
+  const onSuccess = (data: Event) => {
     toast.success("Event created!");
+    navigate("/search");
     console.log(data);
   };
 
@@ -54,7 +58,7 @@ export const useCreateEvent = () => {
   });
 
   // Submit Handler
-  const onSubmit = async (data: TEvent) => {
+  const onSubmit = async (data: Event) => {
     console.log(data);
 
     data.startDate = convertToISODateString(data.startDate);

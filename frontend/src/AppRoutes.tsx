@@ -34,6 +34,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/event/:id" element={<p>Event Page</p>} />
         <Route
           path="/user-profile"
           element={

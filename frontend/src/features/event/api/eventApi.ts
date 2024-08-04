@@ -1,12 +1,12 @@
 import API from "@/config/apiClient";
-import { TEvent } from "../types/eventType";
+import { Event } from "../types/eventType";
 import { EventSearchResponse, SearchParams } from "../types/searchParams";
 
-const API_BASE_URL = "/api/v1/my-events";
+const API_BASE_URL = "/api/v1";
 
 export const eventApi = {
-  createEvent: async (data: FormData): Promise<TEvent> =>
-    await API.post<TEvent>(`${API_BASE_URL}`, data),
+  createEvent: async (data: FormData): Promise<Event> =>
+    await API.post<Event>(`${API_BASE_URL}/my-events`, data),
 
   searchEvents: async (data: SearchParams): Promise<EventSearchResponse> => {
     // build query params for search

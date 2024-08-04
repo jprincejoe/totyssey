@@ -2,6 +2,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import SearchBar from "@/components/SearchBar";
 import { useSearchContext } from "@/contexts/SearchContext";
 import { eventApi } from "@/features/event/api/eventApi";
+import EventCard from "@/features/event/components/EventCard";
 import { SearchParams } from "@/features/event/types/searchParams";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -38,8 +39,14 @@ const SearchPage = () => {
             <SearchBar />
           </div>
         </div>
-        <div className="text-6xl text-center w-full bg-gray-200 py-96">
-          Search results here...
+        <div className="">
+          {eventData?.data?.map((event) => {
+            return (
+              <div className="mb-4" key={event._id}>
+                <EventCard event={event} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

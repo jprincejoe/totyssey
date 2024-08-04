@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import FormCheckbox from "@/components/forms/FormCheckbox";
-import { TEvent } from "../types/eventType";
+import { Event } from "../types/eventType";
 import EventFormSection from "./EventFormSection";
 
 const AGES = [
@@ -12,7 +12,7 @@ const AGES = [
 ];
 
 const EventAgesSection = () => {
-  const { control } = useFormContext<TEvent>();
+  const { control } = useFormContext<Event>();
 
   return (
     <EventFormSection title="Ages" description="Select all that apply">

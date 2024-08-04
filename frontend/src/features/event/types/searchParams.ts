@@ -1,3 +1,5 @@
+import { Event } from "./eventType";
+
 export type SearchParams = {
   location?: string;
   freeToAttend: string;
