@@ -18,12 +18,13 @@ export const eventApi = {
     queryParams.append("endDate", data.endDate || "");
     queryParams.append("page", data.page || "");
 
-    console.log("Query Params", queryParams);
-
     const events = await API.get<EventSearchResponse>(
       `${API_BASE_URL}/events/search/?${queryParams}`
     );
 
     return events;
   },
+
+  getEvent: async (id: string): Promise<Event> =>
+    await API.get<Event>(`${API_BASE_URL}/events/${id}`),
 };

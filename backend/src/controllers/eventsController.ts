@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import AppErrorCode from "../constants/appErrorCode";
-import { NOT_FOUND, OK } from "../constants/http";
+import { BAD_REQUEST, NOT_FOUND, OK } from "../constants/http";
 import appAssert from "../utils/appAssert";
 import catchErrors from "../utils/catchErrors";
 import EventModel from "../models/eventModel";
 import { Pagination } from "../types/paginationType";
 import { EventSearchResponse } from "../types/events";
+import { isValidObjectId } from "../utils/mongoDb";
 
 export const getEventsHandler = catchErrors(
   async (req: Request, res: Response) => {
@@ -13,7 +14,7 @@ export const getEventsHandler = catchErrors(
     const total = await EventModel.countDocuments();
 
     // pagination values
-    const pageSize = 50;
+    const pageSize = 5;
     const page = parseInt(req.query.page ? req.query.page.toString() : "1");
     const skip = (page - 1) * pageSize;
 
@@ -45,5 +46,34 @@ export const getEventsHandler = catchErrors(
 
     // return success
     return res.status(OK).json(eventSearchRespones);
+  }
+);
+
+export const getEventHandler = catchErrors(
+  async (req: Request, res: Response) => {
+    // get id from the params
+    const id = req.params.id;
+
+    // verify id is valid
+    appAssert(
+      isValidObjectId(id),
+      BAD_REQUEST,
+      "Invalid event id input",
+      AppErrorCode.INVALID_INPUT
+    );
+
+    // get event by id
+    const event = await EventModel.findById(id);
+
+    // verify we have an event
+    appAssert(
+      event,
+      NOT_FOUND,
+      "Event not found",
+      AppErrorCode.RESOURCE_NOT_FOUND
+    );
+
+    // return event
+    return res.status(OK).json(event);
   }
 );

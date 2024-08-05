@@ -15,6 +15,7 @@ import ProtectedRoute from "./layouts/components/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { useAuth } from "./contexts/AuthContext";
 import SearchPage from "./pages/SearchPage";
+import EventPage from "./pages/EventPage";
 
 const AppRoutes = () => {
   // For refresh token navigation in api client
@@ -34,7 +35,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/event/:id" element={<p>Event Page</p>} />
+        <Route path="/events/:id" element={<EventPage />} />
         <Route
           path="/user-profile"
           element={

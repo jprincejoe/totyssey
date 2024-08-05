@@ -13,7 +13,6 @@ type TAuthContext = {
 const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  console.log("In AuthProvider");
   const [user, setUser] = useState<TUser | null>(null);
   const { data, isLoading } = useGetUser();
   const [loading, setLoading] = useState(true);

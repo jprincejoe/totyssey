@@ -63,7 +63,7 @@ const EventCard = ({ event }: { event: Event }) => {
         <div className="flex-1">
           {/* Name */}
           <div className="flex space-x-2 items-center mb-2">
-            <Link to={`/event/${event._id}`}>
+            <Link to={`/events/${event._id}`}>
               <h2 className="text-2xl font-bold text-totysseyBlue cursor-pointer">
                 {event.title}
               </h2>
