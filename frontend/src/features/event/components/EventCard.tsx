@@ -76,9 +76,12 @@ const EventCard = ({ event }: { event: Event }) => {
           </div>
 
           {/* Location */}
-          <p className="mb-2 text-sm text-gray-500 font-bold">
-            {event.location}
-          </p>
+          <div className="flex space-x-2 text-sm text-gray-500 font-bold mb-2">
+            {" "}
+            <p>
+              {event.location} • {event.city}, {event.state}
+            </p>
+          </div>
 
           {/* Description */}
           <p className="line-clamp-4 text-gray-700">{event.description}</p>
@@ -92,7 +95,7 @@ const EventCard = ({ event }: { event: Event }) => {
                 return (
                   <div
                     className="px-2 py-1 bg-grey-200 border border-gray-200 rounded-full w-fit"
-                    key={event._id}
+                    key={category}
                   >
                     {category}
                   </div>

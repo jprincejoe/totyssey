@@ -10,8 +10,13 @@ import { isValidObjectId } from "../utils/mongoDb";
 
 export const getEventsHandler = catchErrors(
   async (req: Request, res: Response) => {
+    // search query builder
+    const query = constructSearchQuery(req.query);
+
+    console.log(query);
+
     // get count of total events
-    const total = await EventModel.countDocuments();
+    const total = await EventModel.countDocuments(query);
 
     // pagination values
     const pageSize = 5;
@@ -21,7 +26,7 @@ export const getEventsHandler = catchErrors(
     const pages = Math.ceil(total / pageSize);
 
     // get all events
-    const events = await EventModel.find().skip(skip).limit(pageSize);
+    const events = await EventModel.find(query).skip(skip).limit(pageSize);
 
     // verify we have events
     appAssert(
@@ -77,3 +82,30 @@ export const getEventHandler = catchErrors(
     return res.status(OK).json(event);
   }
 );
+
+const constructSearchQuery = (params: any) => {
+  let query: any = {};
+
+  if (params.location) {
+    query.$or = [
+      { city: { $regex: params.location, $options: "i" } },
+      { state: { $regex: params.location, $options: "i" } },
+      { location: { $regex: params.location, $options: "i" } },
+    ];
+  }
+
+  if (params.freeToAttend !== undefined) {
+    query.isFree = params.freeToAttend === "true";
+  }
+
+  return query;
+
+  // EXAMPLE of req.query
+  // {
+  //   location: 'Dublin',
+  //   freeToAttend: 'true',
+  //   startDate: '2024-08-22T00:00:00.000Z',
+  //   endDate: '2024-08-31T00:00:00.000Z',
+  //   page: '1'
+  // }
+};

@@ -10,7 +10,7 @@ const EventPage = () => {
   const navigate = useNavigate();
   console.log("EventID: ", id);
   if (id === undefined) {
-    return navigate("/");
+    navigate("/");
   }
 
   const {
@@ -30,7 +30,7 @@ const EventPage = () => {
 
   if (isError) {
     toast.error(error.message);
-    return navigate("/");
+    navigate("/");
   }
 
   return <div>{eventData?.title}</div>;
