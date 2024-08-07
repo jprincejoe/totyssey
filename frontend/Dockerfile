@@ -13,9 +13,6 @@ RUN npm ci
 # Copy everything from our current directory (where the Dockerfile is) to the working directory (/app)
 COPY . .
 
-# Start the server with the command from package.json
-# CMD ["npm", "run", "dev", "--", "--host"]
-
 ARG VITE_API_URL
 RUN VITE_API_URL=${VITE_API_URL} npm run build
 
