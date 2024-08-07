@@ -14,6 +14,10 @@ RUN npm ci
 COPY . .
 
 ARG VITE_API_URL
+
+# Log the value of VITE_API_URL
+RUN echo "Building with VITE_API_URL=${VITE_API_URL}"
+
 RUN VITE_API_URL=${VITE_API_URL} npm run build
 
 # Production stage

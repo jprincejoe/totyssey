@@ -1,5 +1,5 @@
 # Node and tag, development stage
-FROM node:18-bookworm-slim as development
+FROM node:18-bookworm-slim AS development
 
 # Set working directory
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN npm run build
 CMD ["npm", "run", "dev"]
 
 # Node and tag, production stage
-FROM node:18-bookworm-slim as production
+FROM node:18-bookworm-slim AS production
 
 # Set working directory
 WORKDIR /app
