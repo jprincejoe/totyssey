@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { TRegister, TUser } from "../types/authTypes";
 import { authApi } from "../api/authApi";
 import { authSchema } from "../validation/authValidation";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/UserContext";
 
 // Default Values
 const defaultValues: TRegister = {

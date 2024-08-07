@@ -8,7 +8,7 @@ import queryClient from "./config/queryClient.ts";
 import AppRoutes from "./AppRoutes.tsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "./contexts/AuthContext.tsx";
+import { AuthProvider } from "./contexts/UserContext.tsx";
 import { SearchContextProvider } from "./contexts/SearchContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

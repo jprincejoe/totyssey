@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { FA, IconWeight } from "@/constants/Icons";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/UserContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { Link } from "react-router-dom";
 

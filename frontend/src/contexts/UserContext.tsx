@@ -10,7 +10,7 @@ type TAuthContext = {
   loading: boolean;
 };
 
-const AuthContext1 = createContext<TAuthContext | undefined>(undefined);
+const AuthContext = createContext<TAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
@@ -43,13 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return <LoadingSpinner />;
   }
 
-  return (
-    <AuthContext1.Provider value={value}>{children}</AuthContext1.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext1);
+  const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
